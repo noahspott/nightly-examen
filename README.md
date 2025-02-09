@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **Nightly Examen App** 🌙✨  
+A guided digital Examen journal designed to help you reflect on your day with prayerful meditation, gratitude, and self-examination. Rooted in the ancient Catholic practice of the Examen, this app provides a modern, minimalist experience for deepening your spiritual life.  
 
-## Getting Started
+## **Features**  
+✅ **Guided Examen** – Step through a structured reflection on God's presence, gratitude, and self-examination.  
+✅ **Session-Based Journaling** – Write down thoughts before or after your Examen (Freemium users' data is not persistent).  
+✅ **Progress Tracking** – Paid users can save and revisit past reflections.  
+✅ **Minimalist & Peaceful UI** – A distraction-free, elegant design inspired by traditional Catholic aesthetics with a modern touch.  
+✅ **Seamless Animations** – Smooth transitions, including a calming completion animation.  
 
-First, run the development server:
+---
 
+## **Tech Stack**  
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)  
+- **Database & Auth:** [Supabase](https://supabase.io/)  
+- **UI & Animations:** Tailwind CSS, Framer Motion  
+- **Storage:** Session-based for free users, persistent for paid users  
+- **State Management:** React Hooks  
+- **Deployment:** [Vercel](https://vercel.com/)  
+
+---
+
+## **Setup & Installation**  
+
+### **1. Clone the repository**  
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/examen-app.git
+cd examen-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### **2. Install dependencies**  
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **3. Set up environment variables**  
+Create a `.env.local` file and add your Supabase credentials:  
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **4. Run the development server**  
+```bash
+npm run dev
+```
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## **Project Structure**  
+```
+/src
+ ├── app/
+ │   ├── layout.tsx  # Root layout wrapper
+ │   ├── page.tsx    # Home screen
+ │   ├── examen/     # Examen flow
+ │   │   ├── presence.tsx
+ │   │   ├── gratitude.tsx
+ │   │   ├── reflection.tsx
+ │   │   ├── shortcomings.tsx
+ │   │   ├── blessings.tsx
+ │   │   ├── closing.tsx
+ ├── components/
+ │   ├── Button.tsx
+ │   ├── SplashScreen.tsx
+ │   ├── CompletionAnimation.tsx
+ ├── lib/
+ │   ├── supabase.ts  # Database integration
+ │   ├── storage.ts   # Session/local storage helpers
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## **Usage**  
 
-## Deploy on Vercel
+### **Freemium Users (No Signup Required)**  
+- Complete the guided Examen  
+- No stored history  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### **Paid Users (Subscription)**  
+- Save reflections  
+- Access additional Examen guides  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## **Credits**  
+Designed & developed by **Noah Spott**. Inspired by the traditional Examen practice of St. Ignatius.  
