@@ -7,7 +7,6 @@ import { EB_Garamond, Playfair_Display } from "next/font/google";
 
 // Components
 import Header from "../components/Header";
-import SplashScreen from "../components/SplashScreen";
 import SplashScreenHandler from "@/components/SplashScreenHandler";
 
 // Styles
