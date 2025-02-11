@@ -19,17 +19,22 @@ const numSteps = examenSteps.length - 1;
 
 export default function Examen() {
   const router = useRouter();
+
+  // State
   const [step, setStep] = useState(() => {
     return Number(sessionStorage.getItem("examenStep")) || 0;
   });
   const [isComplete, setIsComplete] = useState(false);
+  const [blessings, setBlessings] = useState<string[]>([""]);
+  const [failures, setFailures] = useState<string[]>([""]);
+  const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
+  const [failuresTags, setFailuresTags] = useState<string[]>([""]);
 
+  // Saves current step to session storage
   useEffect(() => {
     sessionStorage.setItem("examenStep", step.toString());
 
     if(isComplete) {
-
-      // Reset session storage
       sessionStorage.removeItem("examenStep");
 
       setTimeout(() => {
@@ -55,7 +60,16 @@ export default function Examen() {
         </div>
 
         {/* Examen Step Components Go Here */}
-        {step <= numSteps && <CurrentStep />}
+        {step <= numSteps && <CurrentStep 
+          blessings={blessings}
+          setBlessings={setBlessings}
+          failures={failures}
+          setFailures={setFailures}
+          blessingsTags={blessingsTags}
+          setBlessingsTags={setBlessingsTags}
+          failuresTags={failuresTags}
+          setFailuresTags={setFailuresTags}
+        />}
 
         {/* Complete Examen Button */}
         {step === numSteps && 
