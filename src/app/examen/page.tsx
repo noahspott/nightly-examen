@@ -115,7 +115,7 @@ export default function Examen() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
-          className="transition-all">
+          >
           <StepControls step={step} setStep={setStep} numSteps={numSteps}/>
         </motion.div> : null}
       </div>}
