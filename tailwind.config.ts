@@ -12,6 +12,18 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': { transform: 'scale(1.0) rotate(0deg)' },
+          '50%': { transform: 'scale(1.5) rotate(180deg)' },
+        },
+      },
+      animation: {
+        gradient: 'gradient 15s ease infinite',
+      },
     },
   },
   plugins: [],

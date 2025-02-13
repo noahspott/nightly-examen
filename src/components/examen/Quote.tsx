@@ -1,3 +1,3 @@
 export default function Quote({ children }: { children: React.ReactNode } ) {
-  return <div className="text-xl border-s-4 border-white/10 pl-4 mt-8">{children}</div>;
+  return <div className="text-2xl font-serif border-s-4 border-white/10 pl-4 mt-8">{children}</div>;
 }

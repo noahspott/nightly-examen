@@ -7,7 +7,7 @@ const description = "Reflect honestly on the moments you fell short today, ackno
 
 export default function Step4({ failures, setFailures, failuresTags, setFailuresTags }: ExamenStepProps) {
   return (
-    <div>
+    <>
       <StepHeader heading={heading} description={description} />
       <BlessingsFailuresBlock 
         title="Today's Shortcomings"
@@ -15,8 +15,8 @@ export default function Step4({ failures, setFailures, failuresTags, setFailures
         setInputs={setFailures}
         tags={failuresTags}
         setTags={setFailuresTags}
-        firstInputPlaceholder="Enter your shortcomings here..."
+        firstInputPlaceholder="Today I failed to..."
       />
-    </div>
+    </>
   );
 }

@@ -5,10 +5,6 @@ import type { Metadata } from "next";
 // Fonts
 import { EB_Garamond, Playfair_Display } from "next/font/google";
 
-// Components
-import Header from "../components/Header";
-import SplashScreenHandler from "@/components/SplashScreenHandler";
-
 // Styles
 import "./globals.css";
 
@@ -34,11 +30,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` bg-black/90 text-white`}>
-        <SplashScreenHandler>
-          <Header />
+      <body className={` bg-black text-white`}>
           {children}
-        </SplashScreenHandler>
       </body>
     </html>
   );

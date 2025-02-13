@@ -1,3 +1,5 @@
+// app/examen/page.tsx -- Examen Page
+
 "use client"
 import React, { useEffect, useState } from "react";
 
@@ -21,22 +23,15 @@ export default function Examen() {
   const router = useRouter();
 
   // State
-  const [step, setStep] = useState(() => {
-    return Number(sessionStorage.getItem("examenStep")) || 0;
-  });
+  const [step, setStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [blessings, setBlessings] = useState<string[]>([""]);
   const [failures, setFailures] = useState<string[]>([""]);
   const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
 
-  // Saves current step to session storage
   useEffect(() => {
-    sessionStorage.setItem("examenStep", step.toString());
-
     if(isComplete) {
-      sessionStorage.removeItem("examenStep");
-
       setTimeout(() => {
         router.push("/");
       }, animationDuration);
@@ -59,7 +54,7 @@ export default function Examen() {
           </Link>
         </div>
 
-        {/* Examen Step Components Go Here */}
+        {/* Examen Step Components */}
         {step <= numSteps && <CurrentStep 
           blessings={blessings}
           setBlessings={setBlessings}
@@ -91,7 +86,8 @@ export default function Examen() {
         }
 
         {/* Next and Back buttons */}
-        <div className="mt-16 grid grid-cols-2 max-w-screen-lg mx-auto px-2 py-4 fixed bottom-0 left-0 right-0 ">
+        {/* TODO: Put this into a component and make it able to be hidden so that when the user is typing, the buttons hide. */}
+        <div className=" mt-16 grid grid-cols-2 max-w-screen-lg mx-auto px-2 py-4 fixed bottom-0 left-0 right-0 ">
           <motion.button
             disabled={step <= 0}
             className="user-select-none order-first transition-all disabled:opacity-0 disabled:cursor-not-allowed" 
