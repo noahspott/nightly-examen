@@ -9,7 +9,7 @@ const description = "Take a moment to reflect on the countless gifts God has giv
 const title = "Today's Blessings";
 const blessingPlaceholder = "Today, the Lord has blessed me with...";
 
-export default function Step2({ blessings, setBlessings, blessingsTags, setBlessingsTags }: ExamenStepProps) {
+export default function Step2({ blessings, setBlessings, blessingsTags, setBlessingsTags, setIsTyping }: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />
@@ -20,6 +20,7 @@ export default function Step2({ blessings, setBlessings, blessingsTags, setBless
         tags={blessingsTags}
         setTags={setBlessingsTags}
         firstInputPlaceholder={blessingPlaceholder}
+        setIsTyping={setIsTyping}
       />
     </div>
   );

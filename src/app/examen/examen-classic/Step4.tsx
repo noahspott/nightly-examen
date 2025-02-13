@@ -5,7 +5,7 @@ import { ExamenStepProps } from '../types';
 const heading = "Recognize Your Shortcomings";
 const description = "Reflect honestly on the moments you fell short today, acknowledging where you failed to embrace God's grace.";
 
-export default function Step4({ failures, setFailures, failuresTags, setFailuresTags }: ExamenStepProps) {
+export default function Step4({ failures, setFailures, failuresTags, setFailuresTags, setIsTyping }: ExamenStepProps) {
   return (
     <>
       <StepHeader heading={heading} description={description} />
@@ -16,6 +16,7 @@ export default function Step4({ failures, setFailures, failuresTags, setFailures
         tags={failuresTags}
         setTags={setFailuresTags}
         firstInputPlaceholder="Today I failed to..."
+        setIsTyping={setIsTyping}
       />
     </>
   );

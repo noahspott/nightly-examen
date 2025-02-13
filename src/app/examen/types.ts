@@ -7,4 +7,6 @@ export interface ExamenStepProps {
   setBlessingsTags: React.Dispatch<React.SetStateAction<string[]>>;
   failuresTags: string[];
   setFailuresTags: React.Dispatch<React.SetStateAction<string[]>>;
+  isTyping: boolean;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 } 

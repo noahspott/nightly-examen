@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { X } from "lucide-react";
 
 // Components
 import Link from "next/link";
@@ -12,9 +12,11 @@ import Button from "@/components/Button";
 import ProgressBar from "./ProgressBar";
 import CompletionAnimation from "./CompletionAnimation";
 import { useRouter } from "next/navigation";
+import StepControls from "./StepControls";
 
 // Constants
 import { examenSteps } from "./examen-classic/steps";
+import { div } from "motion/react-client";
 const animationDuration = 3000;
 const numSteps = examenSteps.length - 1;
 
@@ -29,7 +31,7 @@ export default function Examen() {
   const [failures, setFailures] = useState<string[]>([""]);
   const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
-
+  const [isTyping, setIsTyping] = useState(false);
   useEffect(() => {
     if(isComplete) {
       setTimeout(() => {
@@ -64,6 +66,8 @@ export default function Examen() {
           setBlessingsTags={setBlessingsTags}
           failuresTags={failuresTags}
           setFailuresTags={setFailuresTags}
+          setIsTyping={setIsTyping}
+          isTyping={isTyping}
         />}
 
         {/* Complete Examen Button */}
@@ -86,8 +90,7 @@ export default function Examen() {
         }
 
         {/* Next and Back buttons */}
-        {/* TODO: Put this into a component and make it able to be hidden so that when the user is typing, the buttons hide. */}
-        <div className=" mt-16 grid grid-cols-2 max-w-screen-lg mx-auto px-2 py-4 fixed bottom-0 left-0 right-0 ">
+        {/* <div className=" mt-16 grid grid-cols-2 max-w-screen-lg mx-auto px-2 py-4 fixed bottom-0 left-0 right-0 ">
           <motion.button
             disabled={step <= 0}
             className="user-select-none order-first transition-all disabled:opacity-0 disabled:cursor-not-allowed" 
@@ -100,7 +103,21 @@ export default function Examen() {
             onClick={() => setStep(step + 1)}>
               <ChevronRight className="size-16"/>
           </motion.button>
-        </div>
+        </div> */}
+        {/* TODO: Put this into a component and make it able to be hidden so that when the user is typing, the buttons hide. */}
+        
+        {/* Step Controls */}
+        {!isTyping ? 
+        // make the animation happen upon appearance and disappear upon disappearance
+        <motion.div
+          // since the element is fixed to the bottom of the screen, we need to offset it by the height of the screen
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+          className="transition-all">
+          <StepControls step={step} setStep={setStep} numSteps={numSteps}/>
+        </motion.div> : null}
       </div>}
     </>
   );

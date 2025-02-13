@@ -1,10 +1,11 @@
 import StepHeader from "@/components/examen/StepHeader";
+import { ExamenStepProps } from "../types";
 
 const heading = "Resolve and Seek God's Help";
 const description = "Commit to turning away from the sins and shortcomings of yesterday. Write down your resolve for the coming day and ask the Lord to grant you the strength and grace to overcome your weaknesses.";
 const resolvePlaceholder = "Today, I resolve to...";
 
-export default function Step6() {
+export default function Step6({ setIsTyping }: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />
@@ -14,6 +15,8 @@ export default function Step6() {
         <textarea 
           className="mt-4 text-xl size-full text-wrap overflow-hidden resize-none bg-transparent focus:outline-none rounded-md" 
           placeholder={resolvePlaceholder} 
+          onFocus={() => setIsTyping(true)}
+          onBlur={() => setIsTyping(false)}
           onChange={(e) => {
             e.target.style.height = 'auto'
             e.target.style.height = `${e.target.scrollHeight}px`

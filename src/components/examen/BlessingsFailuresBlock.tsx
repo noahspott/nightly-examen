@@ -7,9 +7,10 @@ interface BlessingsFailuresBlockProps {
   tags: string[]; 
   setInputs: React.Dispatch<React.SetStateAction<string[]>>;
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function BlessingsFailuresBlock({ title, firstInputPlaceholder, inputs, setInputs, tags, setTags }: BlessingsFailuresBlockProps) {
+export default function BlessingsFailuresBlock({ title, firstInputPlaceholder, inputs, setInputs, tags, setTags, setIsTyping }: BlessingsFailuresBlockProps) {
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
 
@@ -20,6 +21,14 @@ export default function BlessingsFailuresBlock({ title, firstInputPlaceholder, i
       setFocusIndex(null); // Reset focus index after focusing
     }
   }, [focusIndex]);
+
+  const handleFocus = () => {
+    setIsTyping(true);
+  }
+
+  const handleBlur = () => {
+    setIsTyping(false);
+  }
 
   return (
     <div className="mt-8">
@@ -39,6 +48,8 @@ export default function BlessingsFailuresBlock({ title, firstInputPlaceholder, i
                 setInputs(newInputs);
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
