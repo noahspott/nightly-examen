@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function CompletionAnimation() {
   return (
     <motion.div
-      className="fixed inset-0 font-serif text-4xl flex items-center justify-center bg-black text-white"
+      className="fixed inset-0 font-serif text-2xl sm:text-4xl flex items-center justify-center bg-black text-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

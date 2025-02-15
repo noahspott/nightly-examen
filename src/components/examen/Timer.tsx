@@ -8,7 +8,7 @@ type TimerProps = {
 
 export default function Timer({ minutes, seconds }: TimerProps) {
   const [time, setTime] = useState<TimerProps>({ minutes, seconds });
-  
+
   // Calculate total duration and progress
   const totalSeconds = minutes * 60 + seconds;
   const currentSeconds = time.minutes * 60 + time.seconds;
@@ -35,18 +35,18 @@ export default function Timer({ minutes, seconds }: TimerProps) {
   }, [time]);
 
   // Format numbers to always show two digits
-  const formatNumber = (num: number) => num.toString().padStart(2, '0');
+  const formatNumber = (num: number) => num.toString().padStart(2, "0");
 
   // Update color variables to match app theme
-  const bgColor = 'rgb(0 0 0 / 0.9)'      // black/90
-  const wheelColor = 'rgb(255 255 255 / 0.1)'  // white/10
-  const innerBgColor = 'rgb(0 0 0 / 0.9)'  // black/90
+  const bgColor = "rgb(0 0 0 / 0.9)"; // black/90
+  const wheelColor = "rgb(255 255 255 / 0.1)"; // white/10
+  const innerBgColor = "rgb(0 0 0 / 0.9)"; // black/90
 
   return (
     <div className="relative w-[150px] h-[150px] flex items-center justify-center">
       {/* Outer shadow for depth */}
-      <div className="absolute w-full h-full rounded-full shadow-lg bg-gray-900/20" />
-      
+      <div className="absolute w-full h-full rounded-full bg-gray-900/20" />
+
       {/* Timer wheel */}
       <motion.div
         className="absolute w-full h-full rounded-full"
@@ -60,18 +60,22 @@ export default function Timer({ minutes, seconds }: TimerProps) {
       />
 
       {/* Inner circle */}
-      <div className="absolute w-[88%] h-[88%] rounded-full"
+      <div
+        className="absolute w-[90%] h-[90%] rounded-full shadow-white/10 shadow-2xl"
         style={{
           background: innerBgColor,
-          boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.2)'
         }}
       />
 
       {/* Timer text */}
-      <div className="relative z-10 text-2xl tracking-wider text-gray-100 tabular-nums">
-        <span className="inline-block w-[1.2em] text-right">{formatNumber(time.minutes)}</span>
+      <div className="relative z-10 text-3xl tracking-wider text-gray-100 tabular-nums">
+        <span className="inline-block w-[1.2em] text-right">
+          {formatNumber(time.minutes)}
+        </span>
         <span className="mx-0.5">:</span>
-        <span className="inline-block w-[1.2em] text-right">{formatNumber(time.seconds)}</span>
+        <span className="inline-block w-[1.2em] text-right">
+          {formatNumber(time.seconds)}
+        </span>
       </div>
     </div>
   );

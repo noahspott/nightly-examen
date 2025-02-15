@@ -15,3 +15,16 @@ body {
   -webkit-touch-callout: none; /* iOS long-press menu */
 }
 
+@property --mask-gradient {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: false;
+}
+
+.mask-gradient {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--mask-gradient, 40%)
+  );
+}

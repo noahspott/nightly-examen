@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { motion } from "framer-motion";
 
 interface BlessingsFailuresBlockProps {
   title: string;
@@ -48,6 +49,7 @@ function useInputManagement(
       const nextInput = inputs[index + 1]?.trim();
 
       if (nextInput === "") return;
+
       if (currentInput === "") {
         setFocusIndex(null);
         (e.target as HTMLTextAreaElement).blur();
@@ -111,10 +113,14 @@ export default function BlessingsFailuresBlock({
       {/* Inputs */}
       <ul className="flex flex-col gap-2 mt-4">
         {inputs.map((input, index) => (
-          <li
+          <motion.li
             key={index}
-            className="border-b-2 border-white/10 flex items-start"
+            className="border-b-2 border-white/10 flex items-start gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
+            <p className="mt-[0.6rem]">○</p>
             <TextareaAutosize
               ref={(el) => {
                 textareaRefs.current[index] = el;
@@ -128,7 +134,7 @@ export default function BlessingsFailuresBlock({
               onKeyDown={(e) => handleKeyDown(index, e)}
               aria-label={`${title} entry ${index + 1}`}
             />
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>
