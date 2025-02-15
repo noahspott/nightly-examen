@@ -15,7 +15,7 @@ export default function Step4({ failures, setFailures, failuresTags, setFailures
         setInputs={setFailures}
         tags={failuresTags}
         setTags={setFailuresTags}
-        firstInputPlaceholder="Today I failed to..."
+        placeholder="Today I failed to..."
         setIsTyping={setIsTyping}
       />
     </>

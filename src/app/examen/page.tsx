@@ -16,7 +16,6 @@ import StepControls from "./StepControls";
 
 // Constants
 import { examenSteps } from "./examen-classic/steps";
-import { div } from "motion/react-client";
 const animationDuration = 3000;
 const numSteps = examenSteps.length - 1;
 
@@ -25,13 +24,18 @@ export default function Examen() {
   const router = useRouter();
 
   // State
-  const [step, setStep] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
+  const [step, setStep] = useState<number>(0);
+  
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+
   const [blessings, setBlessings] = useState<string[]>([""]);
   const [failures, setFailures] = useState<string[]>([""]);
+  
   const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
-  const [isTyping, setIsTyping] = useState(false);
+
+  // Effect to handle the completion of the examen
   useEffect(() => {
     if(isComplete) {
       setTimeout(() => {
@@ -88,23 +92,6 @@ export default function Examen() {
             <Button href="">Complete Examen</Button>
           </motion.button>
         }
-
-        {/* Next and Back buttons */}
-        {/* <div className=" mt-16 grid grid-cols-2 max-w-screen-lg mx-auto px-2 py-4 fixed bottom-0 left-0 right-0 ">
-          <motion.button
-            disabled={step <= 0}
-            className="user-select-none order-first transition-all disabled:opacity-0 disabled:cursor-not-allowed" 
-            onClick={() => setStep(step - 1)}>
-              <ChevronLeft className="size-16"/>
-          </motion.button>
-          <motion.button  
-            disabled={step >= numSteps}
-            className="user-select-none place-self-end transition-all disabled:opacity-0 disabled:cursor-not-allowed" 
-            onClick={() => setStep(step + 1)}>
-              <ChevronRight className="size-16"/>
-          </motion.button>
-        </div> */}
-        {/* TODO: Put this into a component and make it able to be hidden so that when the user is typing, the buttons hide. */}
         
         {/* Step Controls */}
         {!isTyping ? 
