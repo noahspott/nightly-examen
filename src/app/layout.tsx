@@ -1,4 +1,3 @@
-
 // Metadata
 import type { Metadata } from "next";
 
@@ -20,7 +19,8 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "NightlyExamen",
-  description: "The nightly examen app to track your spiritual growth",
+  description:
+    "The Nightly Examen journaling app to help you grow consistently in your prayer life.",
 };
 
 export default function RootLayout({
@@ -30,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` bg-black text-white`}>
-          {children}
-      </body>
+      <body className={` bg-black text-white`}>{children}</body>
     </html>
   );
 }
