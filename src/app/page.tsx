@@ -3,13 +3,8 @@
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      {/* Animated gradient background */}
-      {/* <div className="absolute inset-0 bg-black">
-        <div className="absolute inset-0 opacity-30 animate-gradient bg-gradient-radial from-gray-900 via-purple-900/30 to-black" />
-      </div> */}
-
-      <div className="relative flex flex-col items-center justify-center text-center space-y-6">
-        <h1 className="text-white text-4xl sm:text-5xl font-bold">
+      <div className="flex flex-col items-center justify-center text-center space-y-6">
+        <h1 className="text-white text-4xl sm:text-5xl font-bold mt-24">
           NightlyExamen
         </h1>
         <p className="text-white/70 text-xl max-w-md mx-auto">
@@ -25,7 +20,7 @@ export default function Home() {
           Start Examen
         </a>
       </div>
-      <p className="absolute text-white/50 max-w-md mx-auto mt-24 px-4 text-center bottom-20">
+      <p className=" text-white/50 max-w-md mx-auto mt-24 px-4 text-center">
         *Your reflections are private. Any information you enter exists only in
         the browser only for the duration of your Examen.
       </p>
