@@ -16,7 +16,10 @@ export default function LoginForm() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await authService.signInWithOTP(email);
+    const { error } = await authService.signInWithOTP(
+      email,
+      "http://localhost:3000/dashboard",
+    );
 
     if (error) {
       setMessage({

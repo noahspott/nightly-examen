@@ -16,7 +16,7 @@ export default function Home() {
             href="/examen"
             className="text-lg w-full  px-6 py-3 bg-white/10 text-white 
                      hover:bg-white/20 transition-colors duration-200 
-                      font-medium rounded-full"
+                      font-medium rounded-full border-2 border-white/10"
           >
             Start Examen
           </a>

@@ -36,6 +36,16 @@ export default function Examen() {
   const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
 
+  function handleCompleteExamen() {
+    setStep((step) => step + 1);
+
+    // update database with examen completion.
+
+    setTimeout(() => {
+      setIsComplete(true);
+    }, 500);
+  }
+
   // Effect to handle the completion of the examen
   useEffect(() => {
     if (isComplete) {
@@ -86,12 +96,7 @@ export default function Examen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              onClick={() => {
-                setStep((step) => step + 1);
-                setTimeout(() => {
-                  setIsComplete(true);
-                }, 500);
-              }}
+              onClick={handleCompleteExamen}
             >
               <Button href="">Complete Examen</Button>
             </motion.button>
