@@ -1,88 +1,89 @@
-# **Nightly Examen App** 🌙✨  
-A guided digital Examen journal designed to help you reflect on your day with prayerful meditation, gratitude, and self-examination. Rooted in the ancient Catholic practice of the Examen, this app provides a modern, minimalist experience for deepening your spiritual life.  
+# NightlyExamen 🌙✨
 
-## **Features**  
-✅ **Guided Examen** – Step through a structured reflection on God's presence, gratitude, and self-examination.  
-✅ **Session-Based Journaling** – Write down thoughts before or after your Examen (Freemium users' data is not persistent).  
-✅ **Progress Tracking** – Paid users can save and revisit past reflections.  
-✅ **Minimalist & Peaceful UI** – A distraction-free, elegant design inspired by traditional Catholic aesthetics with a modern touch.  
-✅ **Seamless Animations** – Smooth transitions, including a calming completion animation.  
+A React-based spiritual journaling application that helps Christians deepen their prayer life through guided reflection. Built with modern web technologies and a focus on user experience, NightlyExamen provides a distraction-free environment for the ancient Catholic practice of the Examen.
 
----
+## Overview
 
-## **Tech Stack**  
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)  
-- **Database & Auth:** [Supabase](https://supabase.io/)  
-- **UI & Animations:** Tailwind CSS, Framer Motion  
-- **Storage:** Session-based for free users, persistent for paid users  
-- **State Management:** React Hooks  
-- **Deployment:** [Vercel](https://vercel.com/)  
+This project demonstrates my ability to:
 
----
+- Create intuitive, distraction-free user interfaces
+- Implement smooth animations and transitions using Framer Motion
+- Build responsive, accessible components with React and Tailwind CSS
+- Optimize performance through modern build tools and best practices
+- Iterate based on user feedback and real-world usage
 
-## **Setup & Installation**  
+## Features
 
-### **1. Clone the repository**  
-```bash
-git clone https://github.com/yourusername/examen-app.git
-cd examen-app
+✅ **Guided Examen Flow** – Step-by-step spiritual reflection with smooth transitions
+✅ **Custom Input System** – Dynamic text areas with keyboard navigation
+✅ **Responsive Design** – Optimized for all devices with dark mode support
+✅ **Performance Focused** – High Google PageSpeed scores through Next.js optimization
+✅ **Accessibility First** – Built with ARIA compliance and keyboard navigation
+
+## Technical Implementation
+
+### Frontend Architecture
+
+- **Framework:** Next.js 14 with App Router
+- **Styling:** Tailwind CSS for responsive design
+- **Animations:** Framer Motion for fluid transitions
+- **State Management:** React Hooks
+- **Authentication:** Supabase Auth (in progress)
+- **Deployment:** Vercel
+
+### Performance Optimizations
+
+- Server-side rendering for optimal loading
+- Image optimization through Next.js
+- Minimized client-side JavaScript
+- Progressive enhancement
+
+## Development Approach
+
+This project follows user-centered design principles:
+
+1. Focus on creating a distraction-free writing experience
+2. Iterative development based on user feedback
+3. Continuous refinement of animations and transitions
+4. Emphasis on accessibility and usability
+
+## Project Structure
+
+```
+src/
+├── app/                # Next.js App Router pages
+├── components/         # Reusable React components
+├── lib/               # Utility functions and services
+└── styles/            # Global styles and Tailwind config
 ```
 
-### **2. Install dependencies**  
+## Getting Started
+
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/nightly-examen.git
+
+# Install dependencies
 npm install
-```
 
-### **3. Set up environment variables**  
-Create a `.env.local` file and add your Supabase credentials:  
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+# Set up environment variables
+cp .env.example .env.local
 
-### **4. Run the development server**  
-```bash
+# Start development server
 npm run dev
 ```
-Then open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Future Roadmap
+
+- Enhanced user authentication
+- Additional prayer templates
+- Community features
+- Mobile app version
+
+## About the Developer
+
+Built by Noah Spott, a frontend developer focused on creating intuitive user experiences with React. This project reflects my commitment to combining technical excellence with meaningful purpose.
 
 ---
 
-## **Project Structure**  
-```
-/src
- ├── app/
- │   ├── layout.tsx  # Root layout wrapper
- │   ├── page.tsx    # Home screen
- │   ├── examen/     # Examen flow
- │   │   ├── presence.tsx
- │   │   ├── gratitude.tsx
- │   │   ├── reflection.tsx
- │   │   ├── shortcomings.tsx
- │   │   ├── blessings.tsx
- │   │   ├── closing.tsx
- ├── components/
- │   ├── Button.tsx
- │   ├── SplashScreen.tsx
- │   ├── CompletionAnimation.tsx
- ├── lib/
- │   ├── supabase.ts  # Database integration
- │   ├── storage.ts   # Session/local storage helpers
-```
-
----
-
-## **Usage**  
-
-### **Freemium Users (No Signup Required)**  
-- Complete the guided Examen  
-- No stored history  
-
-### **Paid Users (Subscription)**  
-- Save reflections  
-- Access additional Examen guides  
-
----
-
-## **Credits**  
-Designed & developed by **Noah Spott**. Inspired by the traditional Examen practice of St. Ignatius.  
+Inspired by the traditional Examen practice of St. Ignatius.
