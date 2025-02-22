@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { authService } from "@/lib/auth/authService";
+import { signInWithEmail } from "@/app/login/actions";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,17 +16,16 @@ export default function LoginForm() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await authService.signInWithOTP(
-      email,
-      "http://localhost:3000/dashboard",
-    );
+    const { data, error } = await signInWithEmail(email);
 
     if (error) {
+      console.log("signInWithEmail error: ", error);
       setMessage({
         type: "error",
         text: "Failed to send magic link. Please try again.",
       });
     } else {
+      console.log("singInWithEmail data: ", data);
       setMessage({
         type: "success",
         text: "Check your email for the magic link!",

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   console.log("Auth callback initiated - Processing request:", request.url);
 
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get("#access_token");
+  const code = requestUrl.searchParams.get("code");
 
   console.log("code:", code);
 

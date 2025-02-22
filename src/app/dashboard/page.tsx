@@ -1,7 +1,6 @@
 // app/page.tsx - Home Page
 
 // Auth
-import { authService } from "@/lib/auth/authService";
 
 // Utils
 import { getGreeting } from "@/utils/greeting";
@@ -15,13 +14,13 @@ import { redirect } from "next/navigation";
 export default async function Dashboard() {
   const greeting = getGreeting();
 
-  const isAuthenticated = await authService.isAuthenticated();
+  // const isAuthenticated = await authService.isAuthenticated();
 
-  if (!isAuthenticated) {
-    console.log("not authenticated");
-  } else {
-    console.log("authenticated");
-  }
+  // if (!isAuthenticated) {
+  //   console.log("not authenticated");
+  // } else {
+  //   console.log("authenticated");
+  // }
 
   return (
     <>
