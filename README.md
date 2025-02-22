@@ -15,9 +15,13 @@ This project demonstrates my ability to:
 ## Features
 
 ✅ **Guided Examen Flow** – Step-by-step spiritual reflection with smooth transitions
+
 ✅ **Custom Input System** – Dynamic text areas with keyboard navigation
+
 ✅ **Responsive Design** – Optimized for all devices with dark mode support
+
 ✅ **Performance Focused** – High Google PageSpeed scores through Next.js optimization
+
 ✅ **Accessibility First** – Built with ARIA compliance and keyboard navigation
 
 ## Technical Implementation
