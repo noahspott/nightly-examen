@@ -20,9 +20,9 @@ This project demonstrates my ability to:
 
 ✅ **Responsive Design** – Optimized for all devices with dark mode support
 
-✅ **Performance Focused** – High Google PageSpeed scores through Next.js optimization
+<!-- ✅ **Performance Focused** – High Google PageSpeed scores through Next.js optimization
 
-✅ **Accessibility First** – Built with ARIA compliance and keyboard navigation
+✅ **Accessibility First** – Built with ARIA compliance and keyboard navigation -->
 
 ## Technical Implementation
 
@@ -37,8 +37,7 @@ This project demonstrates my ability to:
 
 ### Performance Optimizations
 
-- Server-side rendering for optimal loading
-- Image optimization through Next.js
+- Server-side rendering
 - Minimized client-side JavaScript
 - Progressive enhancement
 
@@ -59,22 +58,6 @@ src/
 ├── components/         # Reusable React components
 ├── lib/               # Utility functions and services
 └── styles/            # Global styles and Tailwind config
-```
-
-## Getting Started
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/nightly-examen.git
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env.local
-
-# Start development server
-npm run dev
 ```
 
 ## Future Roadmap
