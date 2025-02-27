@@ -13,7 +13,7 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full ">
           <a
-            href="/examen"
+            href="/examen/classic"
             className="text-lg w-full  px-6 py-3 bg-white/10 text-white 
                      hover:bg-white/20 transition-colors duration-200 
                       font-medium rounded-full border-2 border-white/10"

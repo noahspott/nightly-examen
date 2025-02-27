@@ -55,13 +55,14 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     !(request.nextUrl.pathname === "/") &&
+    !(request.nextUrl.pathname === "/examen/classic") &&
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/auth")
   ) {
     // no user, potentially respond by redirecting the user to the login page
-    console.log("no user, redirecting to /");
+    console.log("no user, redirecting to /login");
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 

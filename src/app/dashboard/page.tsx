@@ -34,7 +34,7 @@ export default async function Dashboard() {
 
         {/* Start Examen Button */}
         <div className="flex justify-center mt-8">
-          <Button href="/examen">Start Examen</Button>
+          <Button href="/examen/classic">Start Examen</Button>
         </div>
       </div>
     </>
