@@ -3,20 +3,14 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signOut } from "@/lib/auth/auth";
+import { signOut } from "@/lib/auth/client";
 
 export default function Header() {
   const router = useRouter();
 
-  async function handleLogout() {
-    console.log("logging out");
-    const { success, error } = await signOut();
-    if (success) {
-      console.log("signed out successfully");
-      router.push("/");
-    } else {
-      console.error("error signing out:", error);
-    }
+  function handleLogout() {
+    signOut();
+    router.push("/");
   }
 
   return (

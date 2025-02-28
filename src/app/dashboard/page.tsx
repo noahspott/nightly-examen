@@ -6,6 +6,7 @@
  * - allows logout
  * - allows Examen start
  */
+"use client";
 
 // Utils
 import { getGreeting } from "@/utils/greeting";
@@ -15,8 +16,10 @@ import UserStats from "@/components/UserStats";
 import LinkButton from "@/components/ui/LinkButton";
 import Header from "@/components/ui/Header";
 
-export default async function Dashboard() {
+export default function Dashboard() {
   const greeting = getGreeting();
+
+  // Get the session count
 
   return (
     <>
@@ -26,7 +29,7 @@ export default async function Dashboard() {
         <h2 className="text-xl font-bold my-4">{greeting}</h2>
 
         {/* User Stats */}
-        <UserStats />
+        <UserStats sessionCount={0} />
 
         {/* Start Examen Button */}
         <div className="flex justify-center mt-8">
