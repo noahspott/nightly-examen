@@ -1,4 +1,11 @@
-// app/page.tsx - Landing Page
+/**
+ * Landing Page
+ * src/app/page.tsx
+ *
+ * Main marketing page for NightlyExamen
+ */
+
+import LinkButton from "@/components/ui/LinkButton";
 
 export default function Home() {
   return (
@@ -12,22 +19,12 @@ export default function Home() {
           their faith.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full ">
-          <a
-            href="/examen/classic"
-            className="text-lg w-full  px-6 py-3 bg-white/10 text-white 
-                     hover:bg-white/20 transition-colors duration-200 
-                      font-medium rounded-full border-2 border-white/10"
-          >
+          <LinkButton href="/examen/classic" className="w-full">
             Start Examen
-          </a>
-          <a
-            href="/login"
-            className="text-lg w-full px-6 py-3 border-2 border-white text-white 
-                     hover:bg-white/20 transition-colors duration-200 
-                      font-medium rounded-full"
-          >
+          </LinkButton>
+          <LinkButton href="/login" className="w-full" variant="secondary">
             Sign up
-          </a>
+          </LinkButton>
         </div>
       </div>
       <p className=" text-white/50 max-w-md mx-auto mt-24 px-4 text-center">

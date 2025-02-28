@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
 // Components
-import Button from "@/components/Button";
+import Button from "@/components/ui/ButtonBase";
 import ProgressBar from "./ProgressBar";
 import CompletionAnimation from "./CompletionAnimation";
 import { useRouter } from "next/navigation";

@@ -2,12 +2,14 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
+import { useExamen } from "@/context/ExamenContext";
+import { useContext } from "react";
 
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
 // Components
-import Button from "@/components/Button";
+import LinkButton from "@/components/ui/LinkButton";
 import ProgressBar from "../ProgressBar";
 import CompletionAnimation from "../CompletionAnimation";
 import { useRouter } from "next/navigation";
@@ -20,11 +22,12 @@ const animationDuration = 3000;
 const numSteps = examenSteps.length - 1;
 
 export default function Examen() {
+  const { state, dispatch } = useExamen();
   const router = useRouter();
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  // const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
   // State
-  const [step, setStep] = useState<number>(0);
+  // const [step, setStep] = useState<number>(0);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -36,7 +39,8 @@ export default function Examen() {
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
 
   function handleCompleteExamen() {
-    setStep((step) => step + 1);
+    // setStep((step) => step + 1);
+    dispatch({ type: "INCREMENT_STEP" });
 
     // update database with examen completion.
 
@@ -52,79 +56,81 @@ export default function Examen() {
         router.push("/");
       }, animationDuration);
     }
-  }, [step, isComplete]);
+  }, [state.step, isComplete]);
 
-  const CurrentStep = examenSteps[step];
+  const CurrentStep = examenSteps[state.step];
 
   return (
     <>
-      {isComplete ? (
+      {/* {isComplete ? (
         <CompletionAnimation />
-      ) : (
-        <div className="relative max-w-screen-lg mx-auto px-4 user-select-none pb-32">
-          {/* Progress Bar and Exit Button */}
-          <div className="flex gap-8 items-center">
-            <ProgressBar numSteps={numSteps + 1} currentStep={step} />
+      ) : ( */}
+      <div className="relative max-w-screen-lg mx-auto px-4 user-select-none pb-32">
+        {/* Progress Bar and Exit Button */}
+        {/* <div className="flex gap-8 items-center">
+          <ProgressBar numSteps={numSteps + 1} currentStep={step} />
 
-            <button
-              onClick={() => setIsExitModalOpen(true)}
-              className="text-white"
-            >
-              <X className="size-8" />
-            </button>
-          </div>
-          {/* Examen Step Components */}
-          {step <= numSteps && (
-            <CurrentStep
-              blessings={blessings}
-              setBlessings={setBlessings}
-              failures={failures}
-              setFailures={setFailures}
-              blessingsTags={blessingsTags}
-              setBlessingsTags={setBlessingsTags}
-              failuresTags={failuresTags}
-              setFailuresTags={setFailuresTags}
-              setIsTyping={setIsTyping}
-              isTyping={isTyping}
-            />
-          )}
-          {/* Complete Examen Button */}
-          {step === numSteps && (
-            <motion.button
-              className="flex justify-center my-16 w-full"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              onClick={handleCompleteExamen}
-            >
-              <Button href="">Complete Examen</Button>
-            </motion.button>
-          )}
-          {/* Step Controls */}
-          <motion.div
-            // since the element is fixed to the bottom of the screen, we need to offset it by the height of the screen
+          <button
+            onClick={() => setIsExitModalOpen(true)}
+            className="text-white"
+          >
+            <X className="size-8" />
+          </button>
+        </div> */}
+
+        {/* Examen Step Components */}
+        {state.step <= numSteps && (
+          <CurrentStep
+            blessings={blessings}
+            setBlessings={setBlessings}
+            failures={failures}
+            setFailures={setFailures}
+            blessingsTags={blessingsTags}
+            setBlessingsTags={setBlessingsTags}
+            failuresTags={failuresTags}
+            setFailuresTags={setFailuresTags}
+            setIsTyping={setIsTyping}
+            isTyping={isTyping}
+          />
+        )}
+
+        {/* Complete Examen Button */}
+        {/* {step === numSteps && (
+          <motion.button
+            className="flex justify-center my-16 w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            exit={{ opacity: 0, transition: { duration: 0.5 } }}
+            onClick={handleCompleteExamen}
           >
-            <StepControls
-              step={step}
-              setStep={setStep}
-              numSteps={numSteps}
-              isTyping={isTyping}
-            />
-          </motion.div>
-          {/* Add Modal */}
-          <ConfirmationModal
+            <LinkButton href="/">Complete Examen</LinkButton>
+          </motion.button>
+        )} */}
+        {/* Step Controls */}
+        {/* <motion.div
+          // since the element is fixed to the bottom of the screen, we need to offset it by the height of the screen
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          exit={{ opacity: 0, transition: { duration: 0.5 } }}
+        >
+          <StepControls
+            step={step}
+            setStep={setStep}
+            numSteps={numSteps}
+            isTyping={isTyping}
+          />
+        </motion.div> */}
+        {/* Add Modal */}
+        {/* <ConfirmationModal
             isOpen={isExitModalOpen}
             onClose={() => setIsExitModalOpen(false)}
             onConfirm={() => router.push("/")}
             title="Exit Examen"
             message="Are you sure you want to exit? Your progress will not be saved."
-          />
-        </div>
-      )}
+          /> */}
+      </div>
+      {/* )} */}
     </>
   );
 }

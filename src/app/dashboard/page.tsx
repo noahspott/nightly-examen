@@ -7,20 +7,12 @@ import { getGreeting } from "@/utils/greeting";
 
 // Components
 import UserStats from "@/components/UserStats";
-import Button from "@/components/Button";
-import Header from "@/components/Header";
+import LinkButton from "@/components/ui/LinkButton";
+import Header from "@/components/ui/Header";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
   const greeting = getGreeting();
-
-  // const isAuthenticated = await authService.isAuthenticated();
-
-  // if (!isAuthenticated) {
-  //   console.log("not authenticated");
-  // } else {
-  //   console.log("authenticated");
-  // }
 
   return (
     <>
@@ -34,7 +26,7 @@ export default async function Dashboard() {
 
         {/* Start Examen Button */}
         <div className="flex justify-center mt-8">
-          <Button href="/examen/classic">Start Examen</Button>
+          <LinkButton href="/examen/classic">Start Examen</LinkButton>
         </div>
       </div>
     </>

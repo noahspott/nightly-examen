@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signInWithEmail } from "@/app/login/actions";
+import { Button } from "@/components/ui";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -63,13 +64,13 @@ export default function LoginForm() {
         </p>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={loading}
-        className="w-full flex justify-center py-3 px-6 rounded-full  font-medium text-black bg-white disabled:opacity-50"
+        className="w-full disabled:opacity-50"
       >
         {loading ? "Sending magic link..." : "Login"}
-      </button>
+      </Button>
     </form>
   );
 }
