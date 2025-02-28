@@ -79,7 +79,7 @@ export default function ExamenLayout({
   async function handleLogSession() {
     try {
       console.log("Attempting to log session...");
-      const response = await fetch("/api/log-session", { method: "POST" });
+      const response = await fetch("/api/sessions", { method: "POST" });
 
       if (!response.ok) throw new Error("Failed to log session");
 
