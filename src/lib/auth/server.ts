@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
  * @param {any} supabase - Supabase client instance
  * @returns {Promise<any|null>} The authenticated user object or null if not authenticated
  */
-export async function getUser(supabase: any) {
+export async function getUser(supabase: any): Promise<any | null> {
   const {
     data: { user },
     error: authError,
