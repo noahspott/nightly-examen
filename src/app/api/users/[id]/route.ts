@@ -7,8 +7,8 @@ const supabase = createClient(
 );
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } },
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
 
