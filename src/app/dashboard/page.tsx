@@ -6,7 +6,6 @@
  * - allows logout
  * - allows Examen start
  */
-"use client";
 
 // Utils
 import { getGreeting } from "@/utils/greeting";
@@ -19,8 +18,6 @@ import Header from "@/components/ui/Header";
 export default function Dashboard() {
   const greeting = getGreeting();
 
-  // Get the session count
-
   return (
     <>
       <Header />
@@ -29,7 +26,7 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold my-4">{greeting}</h2>
 
         {/* User Stats */}
-        <UserStats sessionCount={0} />
+        <UserStats />
 
         {/* Start Examen Button */}
         <div className="flex justify-center mt-8">
