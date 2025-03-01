@@ -18,20 +18,22 @@ export default function Dashboard() {
   const greeting = getGreeting();
 
   return (
-    <>
+    <div className="max-w-screen-sm">
       <Header />
-      <div className="max-w-screen-lg mx-auto px-4">
+      <div className="px-4">
         {/* Greeting */}
-        <h2 className="text-xl font-bold my-4">{greeting}</h2>
+        <p className="text-xl font-bold my-4">{greeting}</p>
 
         {/* User Stats */}
         <UserStats />
 
         {/* Start Examen Button */}
-        <div className="flex justify-center mt-8">
-          <LinkButton href="/examen/classic">Start Examen</LinkButton>
+        <div className="mt-8 w-full">
+          <LinkButton href="/examen/classic" className="w-full">
+            Start Examen
+          </LinkButton>
         </div>
       </div>
-    </>
+    </div>
   );
 }

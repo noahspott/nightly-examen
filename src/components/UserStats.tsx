@@ -12,13 +12,17 @@ import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
+// Components
+import { StatDisplayCard } from "./ui";
+import { CheckCircle, Circle } from "lucide-react";
+
 type UserStatsProps = {
   sessionCount: number;
 };
 
 type Session = {
   totalSessions: number;
-  weekSessions: { completed_at: string }[];
+  weekCompletionStatus: boolean[];
   streak: number;
 };
 
@@ -29,7 +33,7 @@ type DatabaseSession = {
 export default function UserStats() {
   const [stats, setStats] = useState<Session>({
     totalSessions: 0,
-    weekSessions: [],
+    weekCompletionStatus: Array(7).fill(false),
     streak: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -79,9 +83,7 @@ export default function UserStats() {
 
         const stats = {
           totalSessions: sessions.length,
-          weekSessions: sessions.filter(
-            (s) => new Date(s.completed_at) >= sunday,
-          ),
+          weekCompletionStatus: getWeekSessions(sessions),
           streak: userStreakData.examen_streak || 0,
         };
         setStats(stats);
@@ -94,6 +96,7 @@ export default function UserStats() {
     };
 
     fetchStats();
+    console.log("stats.weekSessions", stats.weekCompletionStatus);
 
     const channel = supabase
       .channel("sessions_changes")
@@ -121,37 +124,64 @@ export default function UserStats() {
     return res.json();
   }
 
+  /**
+   * Determines which days of the current week have completed sessions
+   * @param sessions - Array of database sessions containing completion timestamps
+   * @returns An array of 7 booleans representing each day of the week (Sunday to Saturday)
+   *          where true indicates at least one completed session on that day
+   * @example
+   * // If sessions were completed on Sunday and Wednesday:
+   * getWeekSessions(sessions) // returns [true, false, false, true, false, false, false]
+   */
+  function getWeekSessions(sessions: DatabaseSession[]) {
+    const sunday = getLastSunday(new Date());
+
+    let weekSessionArray = Array(7).fill(false);
+
+    // Loop through each session
+    sessions.forEach((session) => {
+      const sessionDate = new Date(session.completed_at);
+
+      // Check if the session is from this week
+      if (
+        sessionDate >= sunday &&
+        sessionDate < new Date(sunday.getTime() + 7 * 24 * 60 * 60 * 1000)
+      ) {
+        // Get the day of the week (0-6, where 0 is Sunday)
+        const dayIndex = sessionDate.getDay();
+        weekSessionArray[dayIndex] = true;
+      }
+    });
+
+    return weekSessionArray;
+  }
+
+  function getLastSunday(d: Date) {
+    var t = new Date(d);
+    t.setDate(t.getDate() - t.getDay());
+    return t;
+  }
+
   return (
     <div className="flex flex-col gap-2 font-semibold">
       {/* Row 1 -- Week Stats */}
       <div className="flex justify-between bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-3 md:px-6 py-4">
-        {Array.from({ length: 7 }).map((_, index) => (
+        {stats.weekCompletionStatus.map((dayIsComplete, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <h4 className="text-sm">{getDayOfWeek(index)}</h4>
-            <div className="size-8 bg-white rounded-full"></div>
+            <h3 className="text-sm">{getDayOfWeek(index)}</h3>
+
+            {dayIsComplete ? <CheckCircle /> : <Circle />}
           </div>
         ))}
       </div>
 
       {/* Row 2 -- Day Streak and Reflection Hours */}
       <div className="grid grid-cols-2 gap-2">
-        {/* Day Streak */}
-        <div className="flex gap-2 bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-3 md:px-6 py-4">
-          <div className="mt-1 size-4 bg-white rounded-full"></div>
-          <div className="flex flex-col">
-            <p className="">{stats.streak}</p>
-            <h4 className="text-xs">Day Streak</h4>
-          </div>
-        </div>
-
-        {/* Sessions Completed */}
-        <div className="flex gap-2 bg-gradient-to-br from-white/10 to-white/5 rounded-lg py-4 px-3 md:px-6">
-          <div className="mt-1 size-4 bg-white rounded-full"></div>
-          <div className="flex flex-col">
-            <p className="">{stats.totalSessions}</p>
-            <h4 className="text-xs">Sessions</h4>
-          </div>
-        </div>
+        <StatDisplayCard statName="Day Streak" statNum={stats.streak} />
+        <StatDisplayCard
+          statName="Total Sessions"
+          statNum={stats.totalSessions}
+        />
       </div>
     </div>
   );
