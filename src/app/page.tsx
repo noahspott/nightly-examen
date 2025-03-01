@@ -14,7 +14,7 @@ import { getUser } from "@/lib/auth/server";
  */
 export default async function Home() {
   const supabase = await createClient();
-  const user = getUser(supabase);
+  const user = await getUser(supabase);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
