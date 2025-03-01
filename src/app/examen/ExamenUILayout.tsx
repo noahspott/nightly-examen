@@ -66,6 +66,7 @@ export default function ExamenLayout({
   async function handleCompleteExamen() {
     if (user) {
       await handleLogSession();
+      // await handleUpdateUserData(user.id);
     }
 
     dispatch({ type: "INCREMENT_STEP" });
@@ -89,6 +90,20 @@ export default function ExamenLayout({
       console.error("Failed to log session:", error);
     }
   }
+
+  // async function handleUpdateUserData(id: string) {
+  //   try {
+  //     console.log("Attempting to update user data...");
+  //     const response = await fetch(`/api/users/${id}`, { method: "PATCH" });
+
+  //     if (!response.ok) throw new Error("Failed to update user data");
+
+  //     const data = await response.json();
+  //     console.log("User data updated successfully:", data);
+  //   } catch (error) {
+  //     console.error("Failed to update user data:", error);
+  //   }
+  // }
 
   return (
     <>
