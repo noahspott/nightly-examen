@@ -27,13 +27,12 @@ export default async function Home() {
           their faith.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full ">
-          <LinkButton href="/examen/classic" className="w-full">
+          <LinkButton href="/examen/classic" className="w-full button--primary">
             Start Examen
           </LinkButton>
           <LinkButton
             href={!user ? "/login" : "/dashboard"}
-            className="w-full"
-            variant="secondary"
+            className="w-full button--secondary"
           >
             {!user ? "Sign up" : "Dashboard"}
           </LinkButton>

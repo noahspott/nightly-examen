@@ -1,25 +1,23 @@
 import Link from "next/link";
 import { ButtonBaseProps, getButtonClassNames } from "./ButtonBase";
 
-type LinkButtonProps = ButtonBaseProps & {
+type LinkButtonProps = {
+  className: string;
+  variant?: "primary" | "secondary";
   href: string;
   children: React.ReactNode;
   ariaLabel?: string;
 };
 
 export default function LinkButton({
-  variant,
+  variant = "primary",
+  className = "",
   children,
   href,
   ariaLabel,
-  className,
 }: LinkButtonProps) {
   return (
-    <Link
-      href={href}
-      className={`${getButtonClassNames({ variant })} ${className}`}
-      aria-label={ariaLabel}
-    >
+    <Link href={href} className={className} aria-label={ariaLabel}>
       {children}
     </Link>
   );

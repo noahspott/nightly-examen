@@ -15,5 +15,10 @@ export function getButtonClassNames({
     secondary: "border-white hover:bg-white/20",
   };
 
+  console.log(
+    "\n\n[ButtonBase styles]:",
+    `${baseStyles} ${variantStyles[variant]}\n\n`,
+  );
+
   return `${baseStyles} ${variantStyles[variant]} ${className}`;
 }

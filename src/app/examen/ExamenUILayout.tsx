@@ -134,7 +134,12 @@ export default function ExamenLayout({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Button onClick={handleCompleteExamen}>Complete Examen</Button>
+              <Button
+                onClick={handleCompleteExamen}
+                className="button--primary w-full"
+              >
+                Complete Examen
+              </Button>
             </motion.div>
           )}
 

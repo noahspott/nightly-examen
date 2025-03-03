@@ -29,25 +29,25 @@ export default function Examen() {
   const [blessingsTags, setBlessingsTags] = useState<string[]>([""]);
   const [failuresTags, setFailuresTags] = useState<string[]>([""]);
 
-  function handleCompleteExamen() {
-    // setStep((step) => step + 1);
-    dispatch({ type: "INCREMENT_STEP" });
+  // function handleCompleteExamen() {
+  //   // setStep((step) => step + 1);
+  //   dispatch({ type: "INCREMENT_STEP" });
 
-    // update database with examen completion.
+  //   // update database with examen completion.
 
-    setTimeout(() => {
-      setIsComplete(true);
-    }, 500);
-  }
+  //   setTimeout(() => {
+  //     setIsComplete(true);
+  //   }, 500);
+  // }
 
   // Effect to handle the completion of the examen
-  useEffect(() => {
-    if (isComplete) {
-      setTimeout(() => {
-        router.push("/");
-      }, animationDuration);
-    }
-  }, [state.step, isComplete]);
+  // useEffect(() => {
+  //   if (isComplete) {
+  //     setTimeout(() => {
+  //       router.push("/");
+  //     }, animationDuration);
+  //   }
+  // }, [state.step, isComplete]);
 
   const CurrentStep = examenSteps[state.step];
 

@@ -36,14 +36,14 @@ export default function UserStats() {
     weekCompletionStatus: Array(7).fill(false),
     streak: 0,
   });
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const supabase = createClient();
 
   useEffect(() => {
     const fetchStats = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         // Get user
         const {
@@ -91,7 +91,7 @@ export default function UserStats() {
         console.error("Full error details:", err);
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -125,16 +125,21 @@ export default function UserStats() {
   }
 
   /**
-   * Determines which days of the current week have completed sessions
-   * @param sessions - Array of database sessions containing completion timestamps
-   * @returns An array of 7 booleans representing each day of the week (Sunday to Saturday)
-   *          where true indicates at least one completed session on that day
-   * @example
-   * // If sessions were completed on Sunday and Wednesday:
-   * getWeekSessions(sessions) // returns [true, false, false, true, false, false, false]
+   * Analyzes completed sessions to create a weekly activity map
+   * @param sessions - Array of completed sessions from the database
+   * @returns boolean[] - A 7-element array where each index represents a day (0=Sunday to 6=Saturday)
+   *
+   * Key time concepts:
+   * 1. We start by finding last Sunday at 00:00:00
+   * 2. We consider sessions within a 7-day window from that Sunday
+   * 3. Sessions on the same day are collapsed to a single 'true' value
+   *
+   * Note: There might be a timezone issue here. getStartOfWeek() returns
+   * the date at 00:00:00 local time, but completed_at from the database
+   * might be in UTC. This could cause edge-case issues around midnight.
    */
   function getWeekSessions(sessions: DatabaseSession[]) {
-    const sunday = getLastSunday(new Date());
+    const sunday = getStartOfWeek(new Date());
 
     let weekSessionArray = Array(7).fill(false);
 
@@ -142,12 +147,21 @@ export default function UserStats() {
     sessions.forEach((session) => {
       const sessionDate = new Date(session.completed_at);
 
-      // Check if the session is from this week
+      console.log({
+        sundayDate: sunday,
+        sundayISO: sunday.toISOString(),
+        sessionDate: sessionDate,
+        sessionISO: sessionDate.toISOString(),
+        comparison: sessionDate >= sunday,
+      });
+
+      // Define the week's time window:
+      // From: Sunday 00:00:00
+      // To:   Next Sunday 00:00:00 (sunday + 7 days)
       if (
         sessionDate >= sunday &&
         sessionDate < new Date(sunday.getTime() + 7 * 24 * 60 * 60 * 1000)
       ) {
-        // Get the day of the week (0-6, where 0 is Sunday)
         const dayIndex = sessionDate.getDay();
         weekSessionArray[dayIndex] = true;
       }
@@ -156,10 +170,23 @@ export default function UserStats() {
     return weekSessionArray;
   }
 
-  function getLastSunday(d: Date) {
-    var t = new Date(d);
-    t.setDate(t.getDate() - t.getDay());
-    return t;
+  /**
+   * Returns the start (midnight) of the week containing the given date
+   * @param d - The date to get the week start for
+   * @returns A new Date object set to Sunday 00:00:00 of the same week
+   */
+  function getStartOfWeek(d: Date) {
+    // Create a copy of the input date to avoid mutations
+    const date = new Date(d);
+    const day = date.getDay();
+
+    // Subtract days to get to Sunday
+    date.setDate(date.getDate() - day);
+
+    // Set time to midnight (00:00:00.000)
+    date.setHours(0, 0, 0, 0);
+
+    return date;
   }
 
   return (
@@ -177,10 +204,15 @@ export default function UserStats() {
 
       {/* Row 2 -- Day Streak and Reflection Hours */}
       <div className="grid grid-cols-2 gap-2">
-        <StatDisplayCard statName="Day Streak" statNum={stats.streak} />
+        <StatDisplayCard
+          statName="Day Streak"
+          statNum={stats.streak}
+          isLoading={isLoading}
+        />
         <StatDisplayCard
           statName="Total Sessions"
           statNum={stats.totalSessions}
+          isLoading={isLoading}
         />
       </div>
     </div>

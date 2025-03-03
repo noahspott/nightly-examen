@@ -6,7 +6,7 @@ body {
   max-width: 1920px;
   min-width: 320px;
   margin: 0 auto;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 * {
@@ -16,22 +16,22 @@ body {
   -webkit-touch-callout: none; /* iOS long-press menu */
 }
 
-@property --mask-gradient {
-  syntax: "<percentage>";
-  initial-value: 0%;
-  inherits: false;
-}
-
-.mask-gradient {
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black var(--mask-gradient, 40%)
-  );
-}
-
 /* Global Focus Styles */
 *:focus-visible {
   outline: 2px solid white;
   outline-offset: 2px;
+}
+
+@layer components {
+  .button {
+    @apply text-lg px-6 py-3 text-center text-white transition-colors duration-200 font-medium rounded-full border-2;
+  }
+
+  .button--primary {
+    @apply button bg-white/10 border-white/10 hover:bg-white/20;
+  }
+
+  .button--secondary {
+    @apply button border-white hover:bg-white/20;
+  }
 }

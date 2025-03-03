@@ -16,10 +16,16 @@
  * @throws {Error} If there's an error fetching the user data
  */
 
+type StreakResponse = {
+  message?: string;
+  newStreak?: number;
+  error?: Error;
+};
+
 export default async function incrementUserStreak(
   supabase: any,
   userId: string,
-) {
+): Promise<StreakResponse> {
   // Get the user's last active date
   const { data: user, error } = await supabase
     .from("users")

@@ -13,10 +13,17 @@ export default async function logSession() {
 
   const user = await getUser(supabase);
 
+  // Format current time as timestamptz
+  const now = new Date();
+  const timestamptz = now.toISOString().replace("T", " ").replace("Z", "+00");
+
   // Log the session
-  const { error } = await supabase
-    .from("sessions")
-    .insert([{ user_id: user.id }]);
+  const { error } = await supabase.from("sessions").insert([
+    {
+      user_id: user.id,
+      completed_at: timestamptz,
+    },
+  ]);
 
   if (error) {
     throw new Error(error.message);

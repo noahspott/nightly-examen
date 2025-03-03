@@ -5,22 +5,22 @@ type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset" | undefined;
   disabled?: boolean | undefined;
-} & ButtonBaseProps;
+  className?: string;
+};
 
 export default function Button({
-  variant,
   children,
   onClick,
   type,
   disabled = false,
-  className,
+  className = "",
 }: ButtonProps) {
   return (
     <button
       onClick={onClick}
       type={type}
       disabled={disabled}
-      className={`${getButtonClassNames({ variant })} ${className}`}
+      className={className}
     >
       {children}
     </button>
