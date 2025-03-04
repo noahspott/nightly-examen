@@ -64,12 +64,12 @@ export default function ExamenLayout({
   }, [showCompletion]);
 
   async function handleCompleteExamen() {
+    dispatch({ type: "INCREMENT_STEP" });
+
     if (user) {
       await handleLogSession();
       // await handleUpdateUserData(user.id);
     }
-
-    dispatch({ type: "INCREMENT_STEP" });
 
     // Wait for progress bar animation to complete
     setTimeout(() => {

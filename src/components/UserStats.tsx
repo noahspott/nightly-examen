@@ -8,8 +8,8 @@
 "use client";
 
 // Lib
+import { useQuery } from "@tanstack/react-query";
 import { getDayOfWeek } from "@/utils/dayOfTheWeek";
-import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 // Components
@@ -31,98 +31,59 @@ type DatabaseSession = {
 };
 
 export default function UserStats() {
-  const [stats, setStats] = useState<Session>({
-    totalSessions: 0,
-    weekCompletionStatus: Array(7).fill(false),
-    streak: 0,
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
   const supabase = createClient();
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      setIsLoading(true);
-      try {
-        // Get user
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
+  // const [isLoading, setIsLoading] = useState(true);
 
-        if (userError) {
-          console.error("User fetch error:", userError);
-          throw userError;
-        }
+  const fetchStats = async () => {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-        if (!user) throw new Error("No user found");
+    if (userError) throw userError;
+    if (!user) throw new Error("No user found");
 
-        // Get session data and user streak data
-        const [sessionsResponse, userStreakData] = await Promise.all([
-          supabase
-            .from("sessions")
-            .select("completed_at")
-            .order("completed_at", { ascending: false })
-            .eq("user_id", user.id),
+    // Get session data and user streak data
+    const [sessionsResponse, userStreakData] = await Promise.all([
+      supabase
+        .from("sessions")
+        .select("completed_at")
+        .order("completed_at", { ascending: false })
+        .eq("user_id", user.id),
 
-          fetchUserStreak(user.id),
-        ]);
+      fetchUserStreak(user.id),
+    ]);
 
-        const { data: sessions, error: sessionsError } = sessionsResponse;
+    const { data: sessions, error: sessionsError } = sessionsResponse;
+    if (sessionsError) throw sessionsError;
 
-        if (sessionsError) {
-          console.error("Sessions fetch error:", sessionsError);
-          throw sessionsError;
-        }
-
-        // Get the date range for this week (Sunday to now)
-        const sunday = new Date();
-        sunday.setDate(sunday.getDate() - sunday.getDay());
-        sunday.setHours(0, 0, 0, 0);
-
-        const stats = {
-          totalSessions: sessions.length,
-          weekCompletionStatus: getWeekSessions(sessions),
-          streak: userStreakData.examen_streak || 0,
-        };
-        setStats(stats);
-      } catch (err) {
-        console.error("Full error details:", err);
-        setError(err instanceof Error ? err : new Error("Unknown error"));
-      } finally {
-        setIsLoading(false);
-      }
+    return {
+      totalSessions: sessions.length,
+      weekCompletionStatus: getWeekSessions(sessions),
+      streak: userStreakData.examen_streak || 0,
     };
-
-    fetchStats();
-    console.log("stats.weekSessions", stats.weekCompletionStatus);
-
-    const channel = supabase
-      .channel("sessions_changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "sessions",
-        },
-        () => {
-          fetchStats();
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  };
 
   async function fetchUserStreak(userId: string) {
     const res = await fetch(`/api/users/${userId}`);
     if (!res.ok) throw new Error("Failed to fetch user data");
     return res.json();
   }
+
+  // UseQuery
+  const {
+    isLoading,
+    data: stats = {
+      totalSessions: 0,
+      weekCompletionStatus: Array(7).fill(false),
+      streak: 0,
+    },
+    error,
+  } = useQuery({
+    queryKey: ["stats"],
+    queryFn: fetchStats,
+  });
 
   /**
    * Analyzes completed sessions to create a weekly activity map
@@ -189,15 +150,29 @@ export default function UserStats() {
     return date;
   }
 
+  // if (isLoading) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
   return (
     <div className="flex flex-col gap-2 font-semibold">
       {/* Row 1 -- Week Stats */}
       <div className="flex justify-between bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-3 md:px-6 py-4">
         {stats.weekCompletionStatus.map((dayIsComplete, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <h3 className="text-sm">{getDayOfWeek(index)}</h3>
+            <h3
+              className={`text-sm ${isLoading ? "opacity-0" : "opacity-100"}`}
+            >
+              {getDayOfWeek(index)}
+            </h3>
 
-            {dayIsComplete ? <CheckCircle /> : <Circle />}
+            {dayIsComplete ? (
+              <CheckCircle />
+            ) : (
+              <Circle
+                className={`${isLoading ? "opacity-0" : "opacity-100"}`}
+              />
+            )}
           </div>
         ))}
       </div>
