@@ -13,12 +13,12 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-  console.log("🔒 Middleware - Processing request:", {
-    path: request.nextUrl.pathname,
-    search: request.nextUrl.search,
-    userAgent: request.headers.get("user-agent"),
-    cookies: request.cookies.getAll().map((c) => c.name), // Just log cookie names for security
-  });
+  // console.log("🔒 Middleware - Processing request:", {
+  //   path: request.nextUrl.pathname,
+  //   search: request.nextUrl.search,
+  //   userAgent: request.headers.get("user-agent"),
+  //   cookies: request.cookies.getAll().map((c) => c.name), // Just log cookie names for security
+  // });
 
   let supabaseResponse = NextResponse.next({
     request,
@@ -31,17 +31,17 @@ export async function updateSession(request: NextRequest) {
       cookies: {
         getAll() {
           const cookies = request.cookies.getAll();
-          console.log(
-            "🍪 Middleware - Getting cookies:",
-            cookies.map((c) => c.name),
-          );
+          // console.log(
+          //   "🍪 Middleware - Getting cookies:",
+          //   cookies.map((c) => c.name),
+          // );
           return cookies;
         },
         setAll(cookiesToSet) {
-          console.log(
-            "🍪 Middleware - Setting cookies:",
-            cookiesToSet.map((c) => c.name),
-          );
+          // console.log(
+          //   "🍪 Middleware - Setting cookies:",
+          //   cookiesToSet.map((c) => c.name),
+          // );
           cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value),
           );

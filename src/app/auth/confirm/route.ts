@@ -16,73 +16,48 @@ export async function GET(request: NextRequest) {
   console.log("🔑 Auth callback initiated - Processing request:", request.url);
 
   const requestUrl = new URL(request.url);
-  const tokenHash = requestUrl.searchParams.get("token_hash");
-  const type = requestUrl.searchParams.get("type");
+  const email = requestUrl.searchParams.get("email");
+  const token = requestUrl.searchParams.get("token");
 
-  console.log("📝 Initial request state:", {
-    hasTokenHash: !!tokenHash,
-    tokenHashLength: tokenHash?.length,
-    type,
-    cookies: request.cookies.getAll().map((c) => c.name), // Log cookie names for security
-    headers: {
-      // Log relevant headers that might affect auth
-      "user-agent": request.headers.get("user-agent"),
-      accept: request.headers.get("accept"),
-      "accept-language": request.headers.get("accept-language"),
-      "sec-fetch-site": request.headers.get("sec-fetch-site"),
-      "sec-fetch-mode": request.headers.get("sec-fetch-mode"),
-      "sec-fetch-dest": request.headers.get("sec-fetch-dest"),
-    },
-  });
-
-  if (tokenHash && type) {
-    try {
-      console.log("🔄 Creating Supabase client...");
-      const supabase = await createClient();
-
-      console.log("🔐 Attempting OTP verification...");
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: tokenHash,
-        type: type as "email" | "recovery" | "invite" | "magiclink" | "signup",
-      });
-
-      if (error) {
-        console.error("❌ OTP Verification Failed:", {
-          error: error.message,
-          errorCode: error.status,
-          errorName: error.name,
-          tokenType: type,
-          timestamp: new Date().toISOString(),
-          requestUrl: request.url,
-          hasToken: !!tokenHash,
-          // Add stack trace if available
-          stack: error.stack,
-          // Add any additional error properties
-          details: Object.keys(error),
-        });
-
-        const errorUrl = new URL("/login", request.url);
-        errorUrl.searchParams.set("error", "auth");
-        errorUrl.searchParams.set("error_description", error.message);
-        console.log("↩️ Redirecting to error page:", errorUrl.toString());
-        return NextResponse.redirect(errorUrl);
-      }
-
-      console.log("✅ OTP verification successful, redirecting to dashboard");
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } catch (e) {
-      // Log any unexpected errors
-      console.error("💥 Unexpected error during auth flow:", {
-        error: e instanceof Error ? e.message : String(e),
-        stack: e instanceof Error ? e.stack : undefined,
-        type: e?.constructor?.name,
-      });
-      throw e; // Re-throw to trigger error boundary
-    }
-  } else {
-    console.log("⚠️ No auth code found in callback URL");
+  if (!email || !token) {
+    console.log("⚠️ Missing email or token in callback URL");
+    return NextResponse.redirect(
+      new URL("/login?error=missing_params", request.url),
+    );
   }
 
-  console.log("↩️ Redirecting to home page due to authentication failure");
-  return NextResponse.redirect(new URL("/", request.url));
+  try {
+    console.log("🔄 Creating Supabase client...");
+    const supabase = await createClient();
+
+    console.log("🔐 Attempting OTP verification...");
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    });
+
+    if (error) {
+      console.error("❌ OTP Verification Failed:", {
+        error: error.message,
+        errorCode: error.status,
+      });
+
+      const errorUrl = new URL("/login", request.url);
+      errorUrl.searchParams.set("error", "verification_failed");
+      errorUrl.searchParams.set("error_description", error.message);
+      return NextResponse.redirect(errorUrl);
+    }
+
+    console.log("✅ OTP verification successful, redirecting to dashboard");
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  } catch (e) {
+    console.error("💥 Unexpected error during auth flow:", e);
+    return NextResponse.redirect(
+      new URL(
+        "/login?error=unknown&error_description=An+unexpected+error+occurred",
+        request.url,
+      ),
+    );
+  }
 }
