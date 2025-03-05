@@ -53,6 +53,11 @@ export async function updateSession(request: NextRequest) {
           );
         },
       },
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
     },
   );
 
