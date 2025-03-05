@@ -20,6 +20,25 @@ export async function GET(request: NextRequest) {
   const type = requestUrl.searchParams.get("type");
 
   if (tokenHash && type) {
+    const clientTime = new Date();
+    console.log("Received auth parameters:", {
+      tokenHashLength: tokenHash.length,
+      tokenHashPrefix: tokenHash.substring(0, 10) + "...",
+      type,
+      userAgent: request.headers.get("user-agent"),
+      // Log all request headers to see if anything's being modified
+      referrer: request.headers.get("referer"),
+      // Log all URL parameters to see if anything's being added
+      allParams: Object.fromEntries(requestUrl.searchParams.entries()),
+      // Log the full URL path
+      fullPath: requestUrl.pathname + requestUrl.search,
+      clientTimestamp: clientTime.toISOString(),
+      clientTimezoneOffset: clientTime.getTimezoneOffset(),
+      serverTimestamp: new Date().toISOString(),
+      // Log the time difference in minutes
+      timeDiffMinutes: Math.abs(new Date().getTimezoneOffset()),
+    });
+
     const supabase = createClient();
 
     const { error } = await (
