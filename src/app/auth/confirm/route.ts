@@ -30,8 +30,19 @@ export async function GET(request: NextRequest) {
     });
 
     if (error) {
-      console.error("Error verifying OTP:", error.message);
-      return NextResponse.redirect(new URL("/login?error=auth", request.url));
+      console.error("OTP Verification Failed:", {
+        error: error.message,
+        errorCode: error.status,
+        tokenType: type,
+        timestamp: new Date().toISOString(),
+        requestUrl: request.url,
+        hasToken: !!tokenHash,
+      });
+
+      const errorUrl = new URL("/login", request.url);
+      errorUrl.searchParams.set("error", "auth");
+      errorUrl.searchParams.set("error_description", error.message);
+      return NextResponse.redirect(errorUrl);
     }
 
     return NextResponse.redirect(new URL("/dashboard", request.url));
