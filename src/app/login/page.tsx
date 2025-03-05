@@ -63,13 +63,13 @@ export default function Login() {
   );
 }
 
-export function Loading() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 border-4 border-t-blue-600 border-blue-200 rounded-full animate-spin" />
-        <p className="text-white/50">Verifying your login...</p>
-      </div>
-    </div>
-  );
-}
+// export function Loading() {
+//   return (
+//     <div className="min-h-screen flex items-center justify-center">
+//       <div className="flex flex-col items-center gap-4">
+//         <div className="w-8 h-8 border-4 border-t-blue-600 border-blue-200 rounded-full animate-spin" />
+//         <p className="text-white/50">Verifying your login...</p>
+//       </div>
+//     </div>
+//   );
+// }

@@ -129,7 +129,7 @@ export default function ExamenLayout({
           {/* Complete Examen Button */}
           {state.step === state.numSteps - 1 && (
             <motion.div
-              className="flex justify-center my-16 w-full"
+              className="flex justify-center mt-4 w-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
