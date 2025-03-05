@@ -13,62 +13,76 @@ import type { NextRequest } from "next/server";
  *  - / (home) if no token_hash or type is provided
  */
 export async function GET(request: NextRequest) {
-  console.log("Auth callback initiated - Processing request:", request.url);
+  console.log("🔑 Auth callback initiated - Processing request:", request.url);
 
   const requestUrl = new URL(request.url);
   const tokenHash = requestUrl.searchParams.get("token_hash");
   const type = requestUrl.searchParams.get("type");
 
+  console.log("📝 Initial request state:", {
+    hasTokenHash: !!tokenHash,
+    tokenHashLength: tokenHash?.length,
+    type,
+    cookies: request.cookies.getAll().map((c) => c.name), // Log cookie names for security
+    headers: {
+      // Log relevant headers that might affect auth
+      "user-agent": request.headers.get("user-agent"),
+      accept: request.headers.get("accept"),
+      "accept-language": request.headers.get("accept-language"),
+      "sec-fetch-site": request.headers.get("sec-fetch-site"),
+      "sec-fetch-mode": request.headers.get("sec-fetch-mode"),
+      "sec-fetch-dest": request.headers.get("sec-fetch-dest"),
+    },
+  });
+
   if (tokenHash && type) {
-    const clientTime = new Date();
-    console.log("Received auth parameters:", {
-      tokenHashLength: tokenHash.length,
-      tokenHashPrefix: tokenHash.substring(0, 10) + "...",
-      type,
-      userAgent: request.headers.get("user-agent"),
-      // Log all request headers to see if anything's being modified
-      referrer: request.headers.get("referer"),
-      // Log all URL parameters to see if anything's being added
-      allParams: Object.fromEntries(requestUrl.searchParams.entries()),
-      // Log the full URL path
-      fullPath: requestUrl.pathname + requestUrl.search,
-      clientTimestamp: clientTime.toISOString(),
-      clientTimezoneOffset: clientTime.getTimezoneOffset(),
-      serverTimestamp: new Date().toISOString(),
-      // Log the time difference in minutes
-      timeDiffMinutes: Math.abs(new Date().getTimezoneOffset()),
-    });
+    try {
+      console.log("🔄 Creating Supabase client...");
+      const supabase = await createClient();
 
-    const supabase = createClient();
-
-    const { error } = await (
-      await supabase
-    ).auth.verifyOtp({
-      token_hash: tokenHash,
-      type: type as "email" | "recovery" | "invite" | "magiclink" | "signup",
-    });
-
-    if (error) {
-      console.error("OTP Verification Failed:", {
-        error: error.message,
-        errorCode: error.status,
-        tokenType: type,
-        timestamp: new Date().toISOString(),
-        requestUrl: request.url,
-        hasToken: !!tokenHash,
+      console.log("🔐 Attempting OTP verification...");
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: type as "email" | "recovery" | "invite" | "magiclink" | "signup",
       });
 
-      const errorUrl = new URL("/login", request.url);
-      errorUrl.searchParams.set("error", "auth");
-      errorUrl.searchParams.set("error_description", error.message);
-      return NextResponse.redirect(errorUrl);
-    }
+      if (error) {
+        console.error("❌ OTP Verification Failed:", {
+          error: error.message,
+          errorCode: error.status,
+          errorName: error.name,
+          tokenType: type,
+          timestamp: new Date().toISOString(),
+          requestUrl: request.url,
+          hasToken: !!tokenHash,
+          // Add stack trace if available
+          stack: error.stack,
+          // Add any additional error properties
+          details: Object.keys(error),
+        });
 
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+        const errorUrl = new URL("/login", request.url);
+        errorUrl.searchParams.set("error", "auth");
+        errorUrl.searchParams.set("error_description", error.message);
+        console.log("↩️ Redirecting to error page:", errorUrl.toString());
+        return NextResponse.redirect(errorUrl);
+      }
+
+      console.log("✅ OTP verification successful, redirecting to dashboard");
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    } catch (e) {
+      // Log any unexpected errors
+      console.error("💥 Unexpected error during auth flow:", {
+        error: e instanceof Error ? e.message : String(e),
+        stack: e instanceof Error ? e.stack : undefined,
+        type: e?.constructor?.name,
+      });
+      throw e; // Re-throw to trigger error boundary
+    }
   } else {
-    console.log("No auth code found in callback URL");
+    console.log("⚠️ No auth code found in callback URL");
   }
 
-  console.log("Redirecting to home page due to authentication failure");
+  console.log("↩️ Redirecting to home page due to authentication failure");
   return NextResponse.redirect(new URL("/", request.url));
 }
