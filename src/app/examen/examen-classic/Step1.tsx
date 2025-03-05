@@ -3,7 +3,8 @@ import Quote from "@/components/examen/Quote";
 import Timer from "@/components/examen/Timer";
 
 const heading = "Meditate on the Presence of God";
-const description = "Pause and remember that God is with you in this moment, surrounding you with His love and grace.";
+const description =
+  "Pause and remember that God is with you in this moment, surrounding you with His love and grace.";
 
 const quote = "And surely I am with you always, to the very end of the age.";
 const quoteAuthor = "Matthew 28:20";
@@ -13,7 +14,7 @@ export default function Step1() {
     <div>
       <StepHeader heading={heading} description={description} />
       <Quote>
-        <p>"{quote}"</p>
+        <p className="mt-8">"{quote}"</p>
         <br />
         <p>{quoteAuthor}</p>
       </Quote>

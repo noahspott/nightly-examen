@@ -1,31 +1,61 @@
-// app/page.tsx - Home Page
+"use client";
 
-// Utils
+// Lib
+import { useMemo } from "react";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { getGreeting } from "@/utils/greeting";
+import { getRandomBibleVerse } from "@/utils";
+import type { BibleVerse } from "@/types/types";
 
 // Components
 import UserStats from "@/components/UserStats";
-import Button from "@/components/Button";
-import Header from "@/components/Header";
+import LinkButton from "@/components/ui/LinkButton";
+import Header from "@/components/ui/Header";
+import { Quote } from "@/components/examen";
 
-export default function Home() {
+/**
+ * Dashboard Page
+ *
+ * This dashboard page is the home for the logged-in user.
+ * - displays user stats
+ * - allows logout
+ * - allows Examen start
+ */
+export default function Dashboard() {
+  const queryClient = new QueryClient();
   const greeting = getGreeting();
+  const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
 
   return (
-    <>
+    <div className="max-w-screen-sm mx-auto">
       <Header />
-      <div className="max-w-screen-lg mx-auto px-4">
-        {/* Greeting */}
-        <h2 className="text-xl font-bold my-4">{greeting}</h2>
-
-        {/* User Stats */}
-        <UserStats />
-
-        {/* Start Examen Button */}
-        <div className="flex justify-center mt-8">
-          <Button href="/examen">Start Examen</Button>
+      <div className="px-4">
+        <p className="text-xl font-bold my-4">{greeting}</p>
+        <div className="flex flex-col gap-4 py-4">
+          <QueryClientProvider client={queryClient}>
+            <UserStats />
+          </QueryClientProvider>
+          <div className="dashboard--card">
+            <Quote>
+              <div className="flex flex-col gap-4">
+                <p className="">{bibleVerse.text}</p>
+                <div>
+                  <p className="inline">{bibleVerse.book}</p>
+                  <p className="inline">{` ${bibleVerse.chapter}`}</p>
+                  <p className="inline">:</p>
+                  <p className="inline">{bibleVerse.verse}</p>
+                </div>
+              </div>
+            </Quote>
+          </div>
+          <LinkButton
+            href="/examen/classic"
+            className="w-full button--secondary--lg"
+          >
+            Start Examen
+          </LinkButton>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,0 +1,18 @@
+/examen/
+|--layout.tsx
+|--page.tsx
+"Selector for Examen Type w/ Button to proceed"
+
+|--/ExamenType1/
+|  |--page.tsx
+|  |--steps/
+|  |  |--Step1.tsx
+|--/ExamenType2/
+|  |--page.tsx
+|  |--steps/
+|  |  |--Step1.tsx
+|--/ExamenType3/
+|  |--page.tsx
+|  |--steps/
+|  |  |--Step1.tsx
+
