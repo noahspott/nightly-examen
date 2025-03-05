@@ -175,21 +175,21 @@ export default function UserStats() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex flex-col gap-2 font-semibold">
+    <div className="flex flex-col gap-4 font-semibold">
       {/* Row 1 -- Week Stats */}
       <div
-        className={`flex justify-between bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-3 md:px-6 py-4 transition-all duration-1000 ${isLoading && "animate-pulse"}`}
+        className={`flex justify-between dashboard--card ${isLoading && "animate-pulse"}`}
       >
         {stats.weekCompletionStatus.map((dayIsComplete, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
             <h3
-              className={`text-xl transition-all duration-1000 ${isLoading ? "opacity-0" : "opacity-100"}`}
+              className={`text-xl transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
               {getDayOfWeek(index, "sm")}
             </h3>
 
             <div
-              className={`transition-all duration-1000 ${isLoading ? "opacity-0" : "opacity-100"}`}
+              className={`transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
               {dayIsComplete ? (
                 <CheckCircle className={`size-6 sm:size-8 }`} />
@@ -202,7 +202,7 @@ export default function UserStats() {
       </div>
 
       {/* Row 2 -- Day Streak and Reflection Hours */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-4">
         <StatDisplayCard
           statName="Day Streak"
           statNum={stats.streak}

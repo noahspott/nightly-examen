@@ -13,7 +13,7 @@ export default function Step3() {
     <div>
       <StepHeader heading={heading} description={description} />
       <Quote>
-        <p>{prayer}</p>
+        <p className="mt-8">{prayer}</p>
       </Quote>
     </div>
   );

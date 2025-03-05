@@ -67,7 +67,7 @@ export default function LoginForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="w-full disabled:opacity-50"
+        className="w-full disabled:opacity-50 button--primary"
       >
         {loading ? "Sending magic link..." : "Login"}
       </Button>

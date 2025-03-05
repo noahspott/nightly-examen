@@ -7,6 +7,7 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   title: string;
   message: string;
+  confirmationButtonText?: string;
 }
 
 export default function ConfirmationModal({
@@ -15,6 +16,7 @@ export default function ConfirmationModal({
   onConfirm,
   title,
   message,
+  confirmationButtonText = "Exit",
 }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
@@ -45,7 +47,7 @@ export default function ConfirmationModal({
               onClick={onConfirm}
               className="bg-red-500 text-white px-4 py-2 rounded-md"
             >
-              Exit
+              {confirmationButtonText}
             </button>
           </div>
         </div>

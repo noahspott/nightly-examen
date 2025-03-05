@@ -30,8 +30,22 @@ body {
   .button--primary {
     @apply button bg-white/10 border-white/10 hover:bg-white/20;
   }
-
   .button--secondary {
     @apply button border-white hover:bg-white/20;
+  }
+
+  .lg {
+    @apply text-2xl;
+  }
+
+  .button--primary--lg {
+    @apply button--primary lg;
+  }
+  .button--secondary--lg {
+    @apply button--secondary lg;
+  }
+
+  .dashboard--card {
+    @apply bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-4 md:px-8 py-8 transition-all duration-500;
   }
 }

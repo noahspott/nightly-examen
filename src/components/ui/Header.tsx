@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { LogOut } from "lucide-react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth/client";
 import { Settings } from "lucide-react";
+import ConfirmationModal from "../modals/ConfirmationModel";
 
 export default function Header() {
   const router = useRouter();
+
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
   function handleLogout() {
     signOut();
@@ -26,9 +30,18 @@ export default function Header() {
         <Settings />
       </button> */}
 
-      <button className="ml-auto" onClick={handleLogout}>
+      <button className="ml-auto" onClick={() => setIsExitModalOpen(true)}>
         <LogOut />
       </button>
+
+      <ConfirmationModal
+        isOpen={isExitModalOpen}
+        onClose={() => setIsExitModalOpen(false)}
+        onConfirm={() => handleLogout()}
+        title="Logout"
+        message="Are you sure you want to logout?"
+        confirmationButtonText="Logout"
+      />
     </div>
   );
 }
