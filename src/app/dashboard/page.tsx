@@ -50,7 +50,7 @@ export default function Dashboard() {
           </div>
           <LinkButton
             href="/examen/classic"
-            className="w-full button--secondary--lg"
+            className="w-full button--secondary--lg mb-16"
           >
             Start Examen
           </LinkButton>

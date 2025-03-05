@@ -136,7 +136,7 @@ export default function ExamenLayout({
             >
               <Button
                 onClick={handleCompleteExamen}
-                className="button--primary w-full"
+                className="button--primary--lg w-full"
               >
                 Complete Examen
               </Button>
