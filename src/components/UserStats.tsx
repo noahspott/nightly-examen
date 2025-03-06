@@ -175,19 +175,13 @@ export default function UserStats() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex flex-col gap-4 font-semibold">
+    <div className="flex flex-col gap-2 font-semibold">
       {/* Row 1 -- Week Stats */}
       <div
         className={`flex justify-between dashboard--card ${isLoading && "animate-pulse"}`}
       >
         {stats.weekCompletionStatus.map((dayIsComplete, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <h3
-              className={`text-xl transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
-            >
-              {getDayOfWeek(index, "sm")}
-            </h3>
-
             <div
               className={`transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
@@ -197,19 +191,31 @@ export default function UserStats() {
                 <Circle className={`size-6 sm:size-8 }`} />
               )}
             </div>
+            {/* Day of the week -- Smaller screens */}
+            <h3
+              className={`sm:hidden block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            >
+              {getDayOfWeek(index, "sm")}
+            </h3>
+            {/* Day of the week -- Larger screens */}
+            <h3
+              className={`hidden sm:block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            >
+              {getDayOfWeek(index, "md")}
+            </h3>
           </div>
         ))}
       </div>
 
       {/* Row 2 -- Day Streak and Reflection Hours */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2">
         <StatDisplayCard
           statName="Day Streak"
           statNum={stats.streak}
           isLoading={isLoading}
         />
         <StatDisplayCard
-          statName="Total Sessions"
+          statName="Sessions"
           statNum={stats.totalSessions}
           isLoading={isLoading}
         />

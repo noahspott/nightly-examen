@@ -27,19 +27,26 @@ export default function Dashboard() {
   const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
 
   return (
-    <div className="max-w-screen-sm mx-auto">
+    <div className="max-w-screen-md mx-auto">
       <Header />
-      <div className="px-4">
-        <p className="text-xl font-bold my-4">{greeting}</p>
-        <div className="flex flex-col gap-4 py-4">
+      <div className="px-4 flex flex-col gap-8">
+        <h1 className="text-3xl text-white font-bold mt-4">Dashboard</h1>
+        {/* <p className="text-xl font-bold my-4">{greeting}</p> */}
+
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
           <QueryClientProvider client={queryClient}>
             <UserStats />
           </QueryClientProvider>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Daily Wisdom</h2>
           <div className="dashboard--card">
             <Quote>
               <div className="flex flex-col gap-4">
                 <p className="">{bibleVerse.text}</p>
-                <div>
+                <div className="text-xl">
                   <p className="inline">{bibleVerse.book}</p>
                   <p className="inline">{` ${bibleVerse.chapter}`}</p>
                   <p className="inline">:</p>
@@ -48,13 +55,14 @@ export default function Dashboard() {
               </div>
             </Quote>
           </div>
-          <LinkButton
-            href="/examen/classic"
-            className="w-full button--secondary--lg mb-16"
-          >
-            Start Examen
-          </LinkButton>
         </div>
+
+        <LinkButton
+          href="/examen/classic"
+          className="w-full button--primary--lg mb-16 mt-4"
+        >
+          Start Examen
+        </LinkButton>
       </div>
     </div>
   );
