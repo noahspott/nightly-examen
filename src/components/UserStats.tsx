@@ -175,7 +175,7 @@ export default function UserStats() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex flex-col gap-4 font-semibold">
+    <div className="flex flex-col gap-2 font-semibold">
       {/* Row 1 -- Week Stats */}
       <div
         className={`flex justify-between dashboard--card ${isLoading && "animate-pulse"}`}
@@ -202,7 +202,7 @@ export default function UserStats() {
       </div>
 
       {/* Row 2 -- Day Streak and Reflection Hours */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2">
         <StatDisplayCard
           statName="Day Streak"
           statNum={stats.streak}

@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <div className="flex justify-between items-center h-16 shadow-sm max-w-screen-lg mx-auto px-4 border-b border-white/10">
       <Link href="/">
-        <h1 className="text-2xl font-bold">NightlyExamen</h1>
+        <p className="text-2xl font-bold">NightlyExamen</p>
       </Link>
 
       {/* <button onClick={handleSettingsClick}>
