@@ -182,12 +182,6 @@ export default function UserStats() {
       >
         {stats.weekCompletionStatus.map((dayIsComplete, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <h3
-              className={`text-xl transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
-            >
-              {getDayOfWeek(index, "sm")}
-            </h3>
-
             <div
               className={`transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
@@ -197,6 +191,18 @@ export default function UserStats() {
                 <Circle className={`size-6 sm:size-8 }`} />
               )}
             </div>
+            {/* Day of the week -- Smaller screens */}
+            <h3
+              className={`sm:hidden block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            >
+              {getDayOfWeek(index, "sm")}
+            </h3>
+            {/* Day of the week -- Larger screens */}
+            <h3
+              className={`hidden sm:block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+            >
+              {getDayOfWeek(index, "md")}
+            </h3>
           </div>
         ))}
       </div>
@@ -209,7 +215,7 @@ export default function UserStats() {
           isLoading={isLoading}
         />
         <StatDisplayCard
-          statName="Total Sessions"
+          statName="Sessions"
           statNum={stats.totalSessions}
           isLoading={isLoading}
         />

@@ -46,6 +46,6 @@ body {
   }
 
   .dashboard--card {
-    @apply bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-4 md:px-8 py-8 transition-all duration-500;
+    @apply bg-gradient-to-br from-white/10 to-white/5 rounded-lg px-6 sm:px-8 py-8 transition-all duration-500;
   }
 }
