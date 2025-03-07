@@ -35,7 +35,7 @@ import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { createClient } from "@/lib/supabase/client";
 
 // Components
-import { StatDisplayCard } from "./ui";
+import { StatDisplayCard } from "../ui";
 import { CheckCircle, Circle } from "lucide-react";
 
 type UserStatsProps = {
@@ -175,7 +175,7 @@ export default function UserStats() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex flex-col gap-2 font-semibold">
+    <div className="flex flex-col gap-2">
       {/* Row 1 -- Week Stats */}
       <div
         className={`flex justify-between dashboard--card ${isLoading && "animate-pulse"}`}
@@ -193,13 +193,13 @@ export default function UserStats() {
             </div>
             {/* Day of the week -- Smaller screens */}
             <h3
-              className={`sm:hidden block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+              className={`sm:hidden font-semibold block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
               {getDayOfWeek(index, "sm")}
             </h3>
             {/* Day of the week -- Larger screens */}
             <h3
-              className={`hidden sm:block text-base text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+              className={`hidden sm:block text-base font-semibold text-white/70 transition-all duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
             >
               {getDayOfWeek(index, "md")}
             </h3>

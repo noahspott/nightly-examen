@@ -5,10 +5,10 @@ import { useMemo } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { getGreeting } from "@/utils/greeting";
 import { getRandomBibleVerse } from "@/utils";
-import type { BibleVerse } from "@/types/types";
 
 // Components
-import UserStats from "@/components/UserStats";
+import UserStats from "@/components/dashboard/UserStats";
+import { StatDisplayCard } from "@/components/ui";
 import LinkButton from "@/components/ui/LinkButton";
 import Header from "@/components/ui/Header";
 import { Quote } from "@/components/examen";
@@ -31,12 +31,30 @@ export default function Dashboard() {
       <Header />
       <div className="px-4 flex flex-col gap-8">
         <h1 className="text-3xl text-white font-bold mt-4">Dashboard</h1>
-        {/* <p className="text-xl font-bold my-4">{greeting}</p> */}
 
         <div>
-          <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
+          {/* <h2 className="text-2xl font-bold mb-4">Examen Progess</h2> */}
           <QueryClientProvider client={queryClient}>
             <UserStats />
+          </QueryClientProvider>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Last Confession</h2>
+          <QueryClientProvider client={queryClient}>
+            {/* <UserStats /> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {/* <div className="grid grid-cols-1 gap-2"> */}
+              <StatDisplayCard statName="Days" statNum={2} isLoading={false} />
+              <button
+                onClick={() => {}}
+                className=" p-4 bg-white/5  rounded-lg text-white font-semibold text-lg hover:text-white hover:bg-white/10"
+                // className="button--primary"
+              >
+                Restart
+              </button>
+              {/* </div> */}
+            </div>
           </QueryClientProvider>
         </div>
 

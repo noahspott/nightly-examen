@@ -16,8 +16,8 @@ export default function StatDisplayCard({
       <div
         className={`flex flex-col transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
       >
-        <p className="text-2xl">{statNum}</p>
-        <h4 className="text-base text-white/70">{statName}</h4>
+        <p className="text-2xl font-semibold">{statNum}</p>
+        <h4 className="text-base text-white/70 font-semibold">{statName}</h4>
       </div>
     </div>
   );
