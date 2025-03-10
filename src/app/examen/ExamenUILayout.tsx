@@ -19,9 +19,11 @@ import { createClient } from "@/lib/supabase/client";
 // Components
 import { X } from "lucide-react";
 import { Button } from "@/components/ui";
-import ProgressBar from "./ProgressBar";
-import CompletionAnimation from "./CompletionAnimation";
-import StepControls from "./StepControls";
+import {
+  ProgressBar,
+  StepControls,
+  CompletionAnimation,
+} from "@/features/examen/components";
 import ConfirmationModal from "@/components/modals/ConfirmationModel";
 
 // Types
@@ -112,7 +114,7 @@ export default function ExamenLayout({
       ) : (
         <div className="relative max-w-screen-lg mx-auto px-4 user-select-none pb-32">
           {/* Progress Bar and Exit Button */}
-          <div className="flex gap-8 items-center">
+          <div className="flex py-8 w-full gap-8">
             <ProgressBar />
 
             <button

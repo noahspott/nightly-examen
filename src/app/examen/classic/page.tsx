@@ -8,7 +8,7 @@ import { useExamen } from "@/context/ExamenContext";
 import { useRouter } from "next/navigation";
 
 // Constants
-import { examenSteps } from "../examen-classic/steps";
+import { examenSteps } from "../../../features/examen/examen-classic/steps";
 const animationDuration = 3000;
 const numSteps = examenSteps.length - 1;
 

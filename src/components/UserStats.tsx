@@ -119,8 +119,11 @@ export default function UserStats() {
    * the date at 00:00:00 local time, but completed_at from the database
    * might be in UTC. This could cause edge-case issues around midnight.
    */
-  function getWeekSessions(sessions: DatabaseSession[]) {
-    const sunday = getStartOfWeek(new Date());
+  function getWeekSessions(
+    sessions: DatabaseSession[],
+    referenceDate: Date = new Date(),
+  ) {
+    const sunday = getStartOfWeek(referenceDate);
 
     let weekSessionArray = Array(7).fill(false);
 
@@ -169,8 +172,6 @@ export default function UserStats() {
 
     return date;
   }
-
-  // if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
