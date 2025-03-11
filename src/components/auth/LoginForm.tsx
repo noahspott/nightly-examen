@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithOtp, verifyOtp } from "@/app/login/actions";
+import { signInWithOtp, verifyOtp } from "@/app/(routes)/login/actions";
 import { Button } from "@/components/ui";
 import { useRouter } from "next/navigation";
 

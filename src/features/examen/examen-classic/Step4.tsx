@@ -1,5 +1,7 @@
-import StepHeader from "@/components/examen/StepHeader";
-import BlessingsFailuresBlock from "@/components/examen/BlessingsFailuresBlock";
+import {
+  StepHeader,
+  BlessingsFailuresBlock,
+} from "@/features/examen/components";
 import { ExamenStepProps } from "../types";
 
 const heading = "Recognize Your Shortcomings";

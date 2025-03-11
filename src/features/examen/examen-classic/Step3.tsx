@@ -1,5 +1,5 @@
-import StepHeader from "@/components/examen/StepHeader";
-import Quote from "@/components/examen/Quote";
+import { StepHeader } from "@/features/examen/components";
+import { Quote } from "@/components/ui/";
 
 const heading = "Prayer of Gratitude";
 const description =

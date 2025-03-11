@@ -1,6 +1,5 @@
-import StepHeader from "@/components/examen/StepHeader";
-import Quote from "@/components/examen/Quote";
-import Timer from "@/components/examen/Timer";
+import { StepHeader, Timer } from "@/features/examen/components";
+import { Quote } from "@/components/ui/";
 
 const heading = "Meditate on the Presence of God";
 const description =

@@ -1,4 +1,4 @@
-import StepHeader from "@/components/examen/StepHeader";
+import { StepHeader } from "@/features/examen/components";
 import { ExamenStepProps } from "../types";
 
 const heading = "Resolve and Seek God's Help";

@@ -11,7 +11,7 @@ import type { BibleVerse } from "@/types/types";
 import UserStats from "@/components/UserStats";
 import LinkButton from "@/components/ui/LinkButton";
 import Header from "@/components/ui/Header";
-import { Quote } from "@/components/examen";
+import { Quote } from "@/components/ui/";
 
 /**
  * Dashboard Page
