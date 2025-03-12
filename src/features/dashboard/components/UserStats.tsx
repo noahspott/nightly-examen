@@ -35,7 +35,7 @@ import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { createClient } from "@/lib/supabase/client";
 
 // Components
-import { StatDisplayCard } from "./ui";
+import { StatDisplayCard } from "@/features/dashboard/components";
 import { CheckCircle, Circle } from "lucide-react";
 
 type UserStatsProps = {

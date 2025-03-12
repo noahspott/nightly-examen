@@ -9,6 +9,4 @@ export { default as LinkButton } from "./LinkButton";
 export { default as Button } from "./Button";
 
 // Dashboard
-export { default as StatDisplayCard } from "./StatDisplayCard";
-
 export { default as Quote } from "./Quote";

@@ -8,7 +8,7 @@ import { getRandomBibleVerse } from "@/utils";
 import type { BibleVerse } from "@/types/types";
 
 // Components
-import UserStats from "@/components/UserStats";
+import { UserStats } from "@/features/dashboard/components/";
 import LinkButton from "@/components/ui/LinkButton";
 import Header from "@/components/ui/Header";
 import { Quote } from "@/components/ui/";
