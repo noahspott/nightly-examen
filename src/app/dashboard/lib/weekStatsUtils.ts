@@ -5,7 +5,7 @@ import type { DatabaseSession } from "../types/types";
  * @param d - The date to get the week start for
  * @returns A new Date object set to Sunday 00:00:00 of the same week
  */
-function getStartOfWeek(d: Date) {
+export function getStartOfWeek(d: Date) {
   // Create a copy of the input date to avoid mutations
   const date = new Date(d);
   const day = date.getDay();
