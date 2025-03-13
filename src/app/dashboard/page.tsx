@@ -2,13 +2,12 @@
 
 // Lib
 import { useMemo } from "react";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { getGreeting } from "@/utils/greeting";
 import { getRandomBibleVerse } from "@/utils";
 import type { BibleVerse } from "@/types/types";
 
 // Components
-import UserStats from "@/components/UserStats";
+import UserStats from "@/app/dashboard/components/UserStats";
 import LinkButton from "@/components/ui/LinkButton";
 import Header from "@/components/ui/Header";
 import { Quote } from "@/components/examen";
@@ -22,7 +21,6 @@ import { Quote } from "@/components/examen";
  * - allows Examen start
  */
 export default function Dashboard() {
-  const queryClient = new QueryClient();
   const greeting = getGreeting();
   const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
 
@@ -35,9 +33,7 @@ export default function Dashboard() {
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
-          <QueryClientProvider client={queryClient}>
-            <UserStats />
-          </QueryClientProvider>
+          <UserStats />
         </div>
 
         <div>
