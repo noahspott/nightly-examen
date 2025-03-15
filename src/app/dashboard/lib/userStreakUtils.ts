@@ -1,4 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { DatabaseSession } from "../types/types";
 
 export async function fetchUserStreak(userId: string) {
   const res = await fetch(`/api/users/${userId}`);
@@ -67,16 +68,7 @@ export async function updateUserStreak(
   userId: string,
 ) {
   const { examen_streak } = await fetchUserStreak(userId);
-  const newStreak = await calculateNewStreak(supabase, userId, examen_streak);
 
-  await setUserStreak(supabase, userId, newStreak);
-}
-
-export async function calculateNewStreak(
-  supabase: SupabaseClient,
-  userId: string,
-  currentStreak: number,
-): Promise<number> {
   const { data: sessions, error } = await supabase
     .from("sessions")
     .select("completed_at")
@@ -86,6 +78,15 @@ export async function calculateNewStreak(
 
   if (error) throw new Error(`Failed to fetch sessions: ${error.message}`);
 
+  const newStreak = await calculateNewStreak(sessions, examen_streak);
+
+  await setUserStreak(supabase, userId, newStreak);
+}
+
+export function calculateNewStreak(
+  sessions: DatabaseSession[],
+  currentStreak: number,
+): number {
   if (!sessions || sessions.length === 0) return 0;
 
   // Only one session exists

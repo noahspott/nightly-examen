@@ -1,34 +1,85 @@
-import { describe, expect, test, jest, beforeEach, it } from "@jest/globals";
-import { resetUserStreak } from "../lib/userStreakUtils";
+import {
+  describe,
+  expect,
+  test,
+  jest,
+  beforeAll,
+  afterAll,
+} from "@jest/globals";
+import { calculateNewStreak } from "../lib/userStreakUtils";
+import { DatabaseSession } from "../types/types";
 
-describe("resetUserStreak", () => {
-  const mockSupabase = {
-    from: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    eq: jest.fn(),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
+describe("calculateNewStreak", () => {
+  // Helper to create a session at a specific date
+  const createSession = (dateString: string): DatabaseSession => ({
+    completed_at: new Date(dateString).toISOString(),
+    // Add other required DatabaseSession properties with dummy values
   });
 
-  it("should successfully reset user streak", async () => {
-    mockSupabase.eq.mockResolvedValueOnce({ error: null });
+  // Mock today's date to make tests deterministic
+  const TODAY = "2024-03-15";
+  const YESTERDAY = "2024-03-14";
+  const TWO_DAYS_AGO = "2024-03-13";
 
-    await resetUserStreak(mockSupabase as any, "test-user-id");
-
-    expect(mockSupabase.from).toHaveBeenCalledWith("users");
-    expect(mockSupabase.update).toHaveBeenCalledWith({ examen_streak: 0 });
-    expect(mockSupabase.eq).toHaveBeenCalledWith("id", "test-user-id");
+  beforeAll(() => {
+    // Mock Date.now() to return a fixed date
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date(TODAY));
   });
 
-  it("should throw error when update fails", async () => {
-    mockSupabase.eq.mockResolvedValueOnce({
-      error: new Error("Database error"),
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
+  test("returns 0 when no sessions exist", async () => {
+    const result = calculateNewStreak([], 5);
+    expect(result).toBe(0);
+  });
+
+  test("returns 0 when sessions is null or undefined", async () => {
+    const result = calculateNewStreak(null as any, 5);
+    expect(result).toBe(0);
+  });
+
+  describe("single session scenarios", () => {
+    test("returns 1 when single session is today", async () => {
+      const sessions = [createSession(TODAY)];
+      const result = calculateNewStreak(sessions, 0);
+      expect(result).toBe(1);
     });
 
-    await expect(
-      resetUserStreak(mockSupabase as any, "test-user-id"),
-    ).rejects.toThrow("Error resetting userStreak");
+    test("returns 0 when single session is from yesterday", async () => {
+      const sessions = [createSession(YESTERDAY)];
+      const result = calculateNewStreak(sessions, 5);
+      expect(result).toBe(0);
+    });
+  });
+
+  describe("two sessions scenarios", () => {
+    test("maintains streak when both sessions are today", async () => {
+      const sessions = [createSession(TODAY), createSession(TODAY)];
+      const currentStreak = 5;
+      const result = calculateNewStreak(sessions, currentStreak);
+      expect(result).toBe(currentStreak);
+    });
+
+    test("increments streak when sessions are from today and yesterday", async () => {
+      const sessions = [createSession(TODAY), createSession(YESTERDAY)];
+      const currentStreak = 5;
+      const result = calculateNewStreak(sessions, currentStreak);
+      expect(result).toBe(currentStreak + 1);
+    });
+
+    test("resets to 1 when latest is today but previous is older than yesterday", async () => {
+      const sessions = [createSession(TODAY), createSession(TWO_DAYS_AGO)];
+      const result = calculateNewStreak(sessions, 5);
+      expect(result).toBe(1);
+    });
+
+    test("resets to 0 when latest session is not today", async () => {
+      const sessions = [createSession(YESTERDAY), createSession(TWO_DAYS_AGO)];
+      const result = calculateNewStreak(sessions, 5);
+      expect(result).toBe(0);
+    });
   });
 });
