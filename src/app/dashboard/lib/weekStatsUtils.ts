@@ -42,13 +42,13 @@ export function getWeekSessions(sessions: DatabaseSession[]) {
   sessions.forEach((session) => {
     const sessionDate = new Date(session.completed_at);
 
-    console.log({
-      sundayDate: sunday,
-      sundayISO: sunday.toISOString(),
-      sessionDate: sessionDate,
-      sessionISO: sessionDate.toISOString(),
-      comparison: sessionDate >= sunday,
-    });
+    // console.log({
+    //   sundayDate: sunday,
+    //   sundayISO: sunday.toISOString(),
+    //   sessionDate: sessionDate,
+    //   sessionISO: sessionDate.toISOString(),
+    //   comparison: sessionDate >= sunday,
+    // });
 
     // Define the week's time window:
     // From: Sunday 00:00:00

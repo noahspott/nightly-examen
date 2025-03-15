@@ -7,6 +7,7 @@
 import { createClient } from "../server";
 import { getUser } from "@/lib/auth/server";
 import incrementUserStreak from "./incrementUserStreak";
+import { updateLastActiveDate } from "@/app/dashboard/lib/userStreakUtils";
 
 export default async function logSession() {
   const supabase = await createClient();
@@ -29,12 +30,7 @@ export default async function logSession() {
     throw new Error(error.message);
   }
 
-  // Update user streak data
-  try {
-    incrementUserStreak(supabase, user.id);
-  } catch (error) {
-    console.error(error);
-  }
+  // await updateLastActiveDate(supabase, user.id);
 
   return { message: "Session logged successfully" };
 }

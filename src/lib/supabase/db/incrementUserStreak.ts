@@ -26,7 +26,6 @@ export default async function incrementUserStreak(
   supabase: any,
   userId: string,
 ): Promise<StreakResponse> {
-  // Get the user's last active date
   const { data: user, error } = await supabase
     .from("users")
     .select("last_active_date, examen_streak")
@@ -37,47 +36,16 @@ export default async function incrementUserStreak(
     throw new Error(error.message);
   }
 
-  // Calculate Streak
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toISOString().split("T")[0];
+  const { last_active_date, examen_streak } = user;
 
-  console.log("Streak calculation values:", {
-    today,
-    yesterdayStr,
-    userLastActiveDate: user?.last_active_date,
-    currentStreak: user?.examen_streak,
-  });
-
-  // If they completed a section, their streak will be 1
-  let newStreak = 1;
-
-  if (user?.last_active_date === yesterdayStr) {
-    newStreak = (user.examen_streak || 0) + 1;
-    console.log(
-      "User was active yesterday - incrementing streak to:",
-      newStreak,
-    );
-  } else if (user?.last_active_date === today) {
-    newStreak = user.examen_streak;
-    console.log(
-      "User already active today - maintaining streak at:",
-      newStreak,
-    );
-  } else {
-    console.log(
-      "User streak reset to 1 - last active date was:",
-      user?.last_active_date,
-    );
-  }
+  const today = new Date();
 
   // Update record
   const { error: updateError } = await supabase
     .from("users")
     .update({
       last_active_date: today,
-      examen_streak: newStreak,
+      examen_streak: examen_streak + 1,
     })
     .eq("id", userId);
 
@@ -87,5 +55,5 @@ export default async function incrementUserStreak(
   }
 
   console.log("updateUserStreak()");
-  return { message: "User streak updated successfully", newStreak };
+  return { message: "User streak updated successfully" };
 }

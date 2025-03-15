@@ -1,11 +1,6 @@
+import { fetchUserStreak, updateUserStreak } from "./userStreakUtils";
 import { getWeekSessions } from "./weekStatsUtils";
 import { SupabaseClient } from "@supabase/supabase-js";
-
-export async function fetchUserStreak(userId: string) {
-  const res = await fetch(`/api/users/${userId}`);
-  if (!res.ok) throw new Error("Failed to fetch user data");
-  return res.json();
-}
 
 type StatsResponse = {
   totalSessions: number;
@@ -31,6 +26,8 @@ type StatsResponse = {
 export async function fetchStats(
   supabase: SupabaseClient,
 ): Promise<StatsResponse> {
+  console.log("\n\nfetchStats\n\n");
+
   const {
     data: { user },
     error: userError,
@@ -38,6 +35,8 @@ export async function fetchStats(
 
   if (userError) throw userError;
   if (!user) throw new Error("No user found");
+
+  await updateUserStreak(supabase, user.id);
 
   // Get session data and user streak data
   const [sessionsResponse, userStreakData] = await Promise.all([
@@ -50,12 +49,29 @@ export async function fetchStats(
     fetchUserStreak(user.id),
   ]);
 
+  let userStreak = userStreakData;
+  console.log("userStreak: ", userStreak);
+
   const { data: sessions, error: sessionsError } = sessionsResponse;
   if (sessionsError) throw sessionsError;
+
+  // const { last_active_date, examen_streak } = userStreakData;
+
+  // if (
+  //   examen_streak != 0 &&
+  //   !wasLastActiveYesterday(last_active_date) &&
+  //   !wasLastActiveToday(last_active_date)
+  // ) {
+  //   console.log("Resetting User Streak!");
+  //   resetUserStreak(supabase, user.id);
+
+  //   // Refetch userStreak
+  //   userStreak = await fetchUserStreak(user.id);
+  // }
 
   return {
     totalSessions: sessions.length,
     weekCompletionStatus: getWeekSessions(sessions),
-    streak: userStreakData.examen_streak || 0,
+    streak: userStreak.examen_streak,
   };
 }
