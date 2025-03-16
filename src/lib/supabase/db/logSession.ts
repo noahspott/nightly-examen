@@ -4,10 +4,9 @@
  * After the user completes an examen, this will log the session in the database.
  */
 
+import { updateLastStreakUpdate } from "@/app/dashboard/lib/userStreakUtils";
 import { createClient } from "../server";
 import { getUser } from "@/lib/auth/server";
-import incrementUserStreak from "./incrementUserStreak";
-import { updateLastActiveDate } from "@/app/dashboard/lib/userStreakUtils";
 
 export default async function logSession() {
   const supabase = await createClient();
@@ -30,7 +29,7 @@ export default async function logSession() {
     throw new Error(error.message);
   }
 
-  // await updateLastActiveDate(supabase, user.id);
+  updateLastStreakUpdate(supabase, user.id);
 
   return { message: "Session logged successfully" };
 }

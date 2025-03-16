@@ -38,21 +38,8 @@ export function getWeekSessions(sessions: DatabaseSession[]) {
 
   let weekSessionArray = Array(7).fill(false);
 
-  // Loop through each session
   sessions.forEach((session) => {
     const sessionDate = new Date(session.completed_at);
-
-    // console.log({
-    //   sundayDate: sunday,
-    //   sundayISO: sunday.toISOString(),
-    //   sessionDate: sessionDate,
-    //   sessionISO: sessionDate.toISOString(),
-    //   comparison: sessionDate >= sunday,
-    // });
-
-    // Define the week's time window:
-    // From: Sunday 00:00:00
-    // To:   Next Sunday 00:00:00 (sunday + 7 days)
     if (
       sessionDate >= sunday &&
       sessionDate < new Date(sunday.getTime() + 7 * 24 * 60 * 60 * 1000)

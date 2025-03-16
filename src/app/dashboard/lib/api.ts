@@ -26,8 +26,6 @@ type StatsResponse = {
 export async function fetchStats(
   supabase: SupabaseClient,
 ): Promise<StatsResponse> {
-  console.log("\n\nfetchStats\n\n");
-
   const {
     data: { user },
     error: userError,
@@ -38,7 +36,6 @@ export async function fetchStats(
 
   await updateUserStreak(supabase, user.id);
 
-  // Get session data and user streak data
   const [sessionsResponse, userStreakData] = await Promise.all([
     supabase
       .from("sessions")
@@ -49,29 +46,12 @@ export async function fetchStats(
     fetchUserStreak(user.id),
   ]);
 
-  let userStreak = userStreakData;
-  console.log("userStreak: ", userStreak);
-
   const { data: sessions, error: sessionsError } = sessionsResponse;
   if (sessionsError) throw sessionsError;
-
-  // const { last_active_date, examen_streak } = userStreakData;
-
-  // if (
-  //   examen_streak != 0 &&
-  //   !wasLastActiveYesterday(last_active_date) &&
-  //   !wasLastActiveToday(last_active_date)
-  // ) {
-  //   console.log("Resetting User Streak!");
-  //   resetUserStreak(supabase, user.id);
-
-  //   // Refetch userStreak
-  //   userStreak = await fetchUserStreak(user.id);
-  // }
 
   return {
     totalSessions: sessions.length,
     weekCompletionStatus: getWeekSessions(sessions),
-    streak: userStreak.examen_streak,
+    streak: userStreakData.examen_streak,
   };
 }

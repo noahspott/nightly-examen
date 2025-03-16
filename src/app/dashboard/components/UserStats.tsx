@@ -55,7 +55,7 @@ export default function UserStats() {
     queryFn: () => fetchStats(supabase),
   });
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return "An error has occurred. Please try refreshing the browser.";
 
   return (
     <div className="flex flex-col gap-2 font-semibold">
