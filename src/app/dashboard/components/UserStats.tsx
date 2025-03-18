@@ -34,6 +34,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { createClient } from "@/lib/supabase/client";
 import { fetchStats } from "../lib/api";
+import { updateUserStreak } from "../lib/userStreakUtils";
 
 // Components
 import StatDisplayCard from "./StatDisplayCard";
@@ -52,7 +53,17 @@ export default function UserStats() {
     error,
   } = useQuery({
     queryKey: ["stats"],
-    queryFn: () => fetchStats(supabase),
+    queryFn: async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      if (!user) throw new Error("No user found");
+
+      await updateUserStreak(supabase, user.id);
+      return await fetchStats(supabase);
+    },
   });
 
   if (error) return "An error has occurred. Please try refreshing the browser.";

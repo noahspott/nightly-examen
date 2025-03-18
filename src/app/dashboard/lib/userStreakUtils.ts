@@ -39,7 +39,7 @@ export async function fetchUserStreak(userId: string) {
  * Updates the last_active_date for a user in the database to the current date.
  * Returns the date in YYYY-MM-DD format, matching PostgreSQL's date type.
  */
-export async function updateLastStreakUpdate(
+export async function updateLastStreakIncrement(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<void> {
@@ -48,13 +48,13 @@ export async function updateLastStreakUpdate(
   const { error: updateError } = await supabase
     .from("users")
     .update({
-      last_streak_update: today,
+      last_streak_increment: today,
     })
     .eq("id", userId);
 
   if (updateError) {
     throw new Error(
-      `Failed to update last_active_date: ${updateError.message}`,
+      `Failed to update last_streak_increment: ${updateError.message}`,
     );
   }
 }
@@ -63,12 +63,13 @@ export async function setUserStreak(
   supabase: SupabaseClient,
   userId: string,
   newStreak: number,
+  lastStreakIncrement: string,
 ) {
   const { error: updateError } = await supabase
     .from("users")
     .update({
       examen_streak: newStreak,
-      last_streak_update: formatDateToString(new Date()),
+      last_streak_increment: lastStreakIncrement,
     })
     .eq("id", userId);
 
@@ -79,7 +80,7 @@ export async function setUserStreak(
 export function calculateNewStreak(
   sessions: DatabaseSession[],
   currentStreak: number,
-  lastStreakUpdate: string | null | undefined,
+  lastStreakIncrement: string | null | undefined,
 ): number {
   // No sessions exist
   if (!sessions || sessions.length === 0) {
@@ -90,31 +91,41 @@ export function calculateNewStreak(
   const today = getTodayString();
   const yesterday = getYesterdayString();
 
-  // Handle undefined or null lastStreakUpdate
-  if (!lastStreakUpdate) {
-    console.log("[calculateNewStreak] lastStreakUpdate:", lastStreakUpdate);
-
-    // If there's a session today, start streak at 1
-    const latestSessionDate = formatDateToString(
-      new Date(sessions[0].completed_at),
-    );
-    return latestSessionDate === today ? 1 : 0;
-  }
-
-  if (lastStreakUpdate === today) {
-    console.log("Streak was already updated today, returning current streak");
-    return currentStreak;
-  }
-
   // Only one session exists
   if (sessions.length === 1) {
     console.log("Only one session exists");
     const sessionDate = formatDateToString(new Date(sessions[0].completed_at));
-    return sessionDate === today ? 1 : 0;
+    if (sessionDate === today || sessionDate === yesterday) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // Handle undefined or null lastStreakIncrement
+  if (!lastStreakIncrement) {
+    console.log(
+      "last_streak_increment === null",
+      "[calculateNewStreak] lastStreakIncrement:",
+      lastStreakIncrement,
+    );
+
+    // If there's a session today or yesterday, start streak at 1
+    const latestSessionDate = formatDateToString(
+      new Date(sessions[0].completed_at),
+    );
+    return latestSessionDate === (today || yesterday) ? 1 : 0;
+  }
+
+  if (lastStreakIncrement === today) {
+    console.log(
+      "Streak was already incremented today, returning current streak",
+    );
+    return currentStreak;
   }
 
   // More than 1 sessions exist
   console.log("There are multiple sessions");
+
   const sessionDates = sessions.map((s) =>
     formatDateToString(new Date(s.completed_at)),
   );
@@ -157,7 +168,7 @@ export async function updateUserStreak(
   supabase: SupabaseClient,
   userId: string,
 ) {
-  const { examen_streak = 0, last_streak_update } =
+  const { examen_streak = 0, last_streak_increment } =
     await fetchUserStreak(userId);
 
   const { data: sessions, error } = await supabase
@@ -167,15 +178,24 @@ export async function updateUserStreak(
     .order("completed_at", { ascending: false })
     .limit(2);
 
+  console.log("sessions: ", sessions);
+
   if (error) throw new Error(`Failed to fetch sessions: ${error.message}`);
 
-  console.log("last_streak_update", last_streak_update);
+  console.log("last_streak_increment", last_streak_increment);
 
   const newStreak = calculateNewStreak(
     sessions,
     examen_streak,
-    last_streak_update,
+    last_streak_increment,
   );
 
-  await setUserStreak(supabase, userId, newStreak);
+  let newLastStreakIncrement = last_streak_increment;
+
+  if (newStreak > examen_streak) {
+    console.log("lastStreakIncrement updated!");
+    newLastStreakIncrement = getTodayString();
+  }
+
+  await setUserStreak(supabase, userId, newStreak, newLastStreakIncrement);
 }

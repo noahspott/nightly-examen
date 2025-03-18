@@ -34,8 +34,6 @@ export async function fetchStats(
   if (userError) throw userError;
   if (!user) throw new Error("No user found");
 
-  await updateUserStreak(supabase, user.id);
-
   const [sessionsResponse, userStreakData] = await Promise.all([
     supabase
       .from("sessions")

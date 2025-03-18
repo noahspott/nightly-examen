@@ -29,7 +29,5 @@ export default async function logSession() {
     throw new Error(error.message);
   }
 
-  updateLastStreakUpdate(supabase, user.id);
-
   return { message: "Session logged successfully" };
 }
