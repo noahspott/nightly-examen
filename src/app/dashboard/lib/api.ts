@@ -30,7 +30,6 @@ export async function fetchStats(
     data: { user },
     error: userError,
   } = await supabase.auth.getUser();
-
   if (userError) throw userError;
   if (!user) throw new Error("No user found");
 

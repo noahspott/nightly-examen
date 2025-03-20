@@ -2,16 +2,18 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { DatabaseSession } from "../types/types";
 
 // Date utility functions
-const formatDateToString = (date: Date): string => {
+export const formatDateToString = (date: Date): string => {
   return date.toISOString().split("T")[0];
 };
 
-const getTodayString = (): string => formatDateToString(new Date());
-const getYesterdayString = (): string => {
+export function getTodayString() {
+  return formatDateToString(new Date());
+}
+export function getYesterdayString() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   return formatDateToString(yesterday);
-};
+}
 
 // Date comparison functions
 export function wasLastActiveYesterday(lastActiveDate: Date) {
@@ -113,7 +115,9 @@ export function calculateNewStreak(
     const latestSessionDate = formatDateToString(
       new Date(sessions[0].completed_at),
     );
-    return latestSessionDate === (today || yesterday) ? 1 : 0;
+    return latestSessionDate === today || latestSessionDate === yesterday
+      ? 1
+      : 0;
   }
 
   if (lastStreakIncrement === today) {
@@ -130,10 +134,10 @@ export function calculateNewStreak(
     formatDateToString(new Date(s.completed_at)),
   );
 
-  if (sessionDates[0] === today && sessionDates[1] === today) {
-    console.log("Last 2 sessions are both from today, maintaining streak");
-    return currentStreak; // maintain current streak
-  }
+  // if (sessionDates[0] === today && sessionDates[1] === today) {
+  //   console.log("Last 2 sessions are both from today, maintaining streak");
+  //   return currentStreak; // maintain current streak
+  // }
 
   if (sessionDates[0] === today && sessionDates[1] === yesterday) {
     console.log(
@@ -154,6 +158,7 @@ export function calculateNewStreak(
     return currentStreak; // maintain streak
   }
 
+  console.log("No session today or yesterday, returning 0");
   return 0; // reset to 0
 }
 
@@ -190,12 +195,12 @@ export async function updateUserStreak(
     last_streak_increment,
   );
 
-  let newLastStreakIncrement = last_streak_increment;
+  let newStreakIncrement = last_streak_increment;
 
   if (newStreak > examen_streak) {
     console.log("lastStreakIncrement updated!");
-    newLastStreakIncrement = getTodayString();
+    newStreakIncrement = getTodayString();
   }
 
-  await setUserStreak(supabase, userId, newStreak, newLastStreakIncrement);
+  await setUserStreak(supabase, userId, newStreak, newStreakIncrement);
 }

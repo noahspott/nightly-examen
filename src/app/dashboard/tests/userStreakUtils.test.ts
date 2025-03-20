@@ -6,80 +6,106 @@ import {
   beforeAll,
   afterAll,
 } from "@jest/globals";
-import { calculateNewStreak } from "../lib/userStreakUtils";
+import {
+  calculateNewStreak,
+  getTodayString,
+  getYesterdayString,
+  formatDateToString,
+} from "../lib/userStreakUtils";
 import { DatabaseSession } from "../types/types";
 
 describe("calculateNewStreak", () => {
-  // Helper to create a session at a specific date
-  const createSession = (dateString: string): DatabaseSession => ({
-    completed_at: new Date(dateString).toISOString(),
-    // Add other required DatabaseSession properties with dummy values
+  test("New user, no sessions should return 0", () => {
+    const sessions: DatabaseSession[] = [];
+    const currentStreak = 0;
+    const lastStreakIncrement = undefined;
+
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(0);
   });
 
-  // Mock today's date to make tests deterministic
-  const TODAY = "2024-03-15";
-  const YESTERDAY = "2024-03-14";
-  const TWO_DAYS_AGO = "2024-03-13";
+  test("User completes their first session - should return 1", () => {
+    const sessions: DatabaseSession[] = [{ completed_at: getTodayString() }];
+    const currentStreak = 0;
+    const lastStreakIncrement = undefined;
 
-  beforeAll(() => {
-    // Mock Date.now() to return a fixed date
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date(TODAY));
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(1);
   });
 
-  afterAll(() => {
-    jest.useRealTimers();
+  test("User arrives at dashboard. They completed their first session yesterday. The function should return 1", () => {
+    const sessions: DatabaseSession[] = [
+      { completed_at: getYesterdayString() },
+    ];
+    const currentStreak = 1;
+    const lastStreakIncrement = getYesterdayString();
+
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(1);
   });
 
-  test("returns 0 when no sessions exist", async () => {
-    const result = calculateNewStreak([], 5);
-    expect(result).toBe(0);
+  test("User completed their first session yesterday. The function should return 1", () => {
+    const sessions: DatabaseSession[] = [
+      { completed_at: getYesterdayString() },
+    ];
+    const currentStreak = 1;
+    const lastStreakIncrement = getYesterdayString();
+
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(1);
   });
 
-  test("returns 0 when sessions is null or undefined", async () => {
-    const result = calculateNewStreak(null as any, 5);
-    expect(result).toBe(0);
+  test("User just completed a session today. They also completed 1 session yesterday. The function should return 2", () => {
+    const sessions: DatabaseSession[] = [
+      { completed_at: getTodayString() },
+      { completed_at: getYesterdayString() },
+    ];
+    const currentStreak = 1;
+    const lastStreakIncrement = getYesterdayString();
+
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(2);
   });
 
-  describe("single session scenarios", () => {
-    test("returns 1 when single session is today", async () => {
-      const sessions = [createSession(TODAY)];
-      const result = calculateNewStreak(sessions, 0);
-      expect(result).toBe(1);
-    });
+  test("User just completed a session today. They also completed a session 2 days ago. The function should return 1", () => {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const twoDaysAgoString = formatDateToString(twoDaysAgo);
 
-    test("returns 0 when single session is from yesterday", async () => {
-      const sessions = [createSession(YESTERDAY)];
-      const result = calculateNewStreak(sessions, 5);
-      expect(result).toBe(0);
-    });
+    const sessions: DatabaseSession[] = [
+      { completed_at: getTodayString() },
+      { completed_at: twoDaysAgoString },
+    ];
+    const currentStreak = 1;
+    const lastStreakIncrement = twoDaysAgoString;
+
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(1);
   });
 
-  describe("two sessions scenarios", () => {
-    test("maintains streak when both sessions are today", async () => {
-      const sessions = [createSession(TODAY), createSession(TODAY)];
-      const currentStreak = 5;
-      const result = calculateNewStreak(sessions, currentStreak);
-      expect(result).toBe(currentStreak);
-    });
+  test("User had a streak, but missed a day. They completed 2 sessions. The function should return 0", () => {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const twoDaysAgoString = formatDateToString(twoDaysAgo);
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    const threeDaysAgoString = formatDateToString(threeDaysAgo);
 
-    test("increments streak when sessions are from today and yesterday", async () => {
-      const sessions = [createSession(TODAY), createSession(YESTERDAY)];
-      const currentStreak = 5;
-      const result = calculateNewStreak(sessions, currentStreak);
-      expect(result).toBe(currentStreak + 1);
-    });
+    const sessions: DatabaseSession[] = [
+      { completed_at: twoDaysAgoString },
+      { completed_at: threeDaysAgoString },
+    ];
+    const currentStreak = 2;
+    const lastStreakIncrement = twoDaysAgoString;
 
-    test("resets to 1 when latest is today but previous is older than yesterday", async () => {
-      const sessions = [createSession(TODAY), createSession(TWO_DAYS_AGO)];
-      const result = calculateNewStreak(sessions, 5);
-      expect(result).toBe(1);
-    });
-
-    test("resets to 0 when latest session is not today", async () => {
-      const sessions = [createSession(YESTERDAY), createSession(TWO_DAYS_AGO)];
-      const result = calculateNewStreak(sessions, 5);
-      expect(result).toBe(0);
-    });
+    expect(
+      calculateNewStreak(sessions, currentStreak, lastStreakIncrement),
+    ).toBe(0);
   });
 });
