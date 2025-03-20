@@ -1,6 +1,8 @@
 // Metadata
 import type { Metadata } from "next";
 
+import Providers from "@/components/Providers";
+
 // Styles
 import "./globals.css";
 
@@ -17,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` bg-black text-white`}>{children}</body>
+      <body className={` bg-black text-white`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

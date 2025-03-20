@@ -15,6 +15,7 @@ import { useExamen } from "@/context/ExamenContext";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Components
 import { X } from "lucide-react";
@@ -35,6 +36,7 @@ export default function ExamenLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = useQueryClient();
   const { state, dispatch } = useExamen();
   const router = useRouter();
 
@@ -68,6 +70,7 @@ export default function ExamenLayout({
 
     if (user) {
       await handleLogSession();
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       // await handleUpdateUserData(user.id);
     }
 
