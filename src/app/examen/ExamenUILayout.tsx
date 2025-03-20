@@ -71,7 +71,6 @@ export default function ExamenLayout({
     if (user) {
       await handleLogSession();
       queryClient.invalidateQueries({ queryKey: ["stats"] });
-      // await handleUpdateUserData(user.id);
     }
 
     // Wait for progress bar animation to complete
