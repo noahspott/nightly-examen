@@ -86,7 +86,6 @@ export function calculateNewStreak(
 ): number {
   // No sessions exist
   if (!sessions || sessions.length === 0) {
-    console.log("No sessions exist, returning 0");
     return 0;
   }
 
@@ -95,7 +94,6 @@ export function calculateNewStreak(
 
   // Only one session exists
   if (sessions.length === 1) {
-    console.log("Only one session exists");
     const sessionDate = formatDateToString(new Date(sessions[0].completed_at));
     if (sessionDate === today || sessionDate === yesterday) {
       return 1;
@@ -105,12 +103,6 @@ export function calculateNewStreak(
 
   // Handle undefined or null lastStreakIncrement
   if (!lastStreakIncrement) {
-    console.log(
-      "last_streak_increment === null",
-      "[calculateNewStreak] lastStreakIncrement:",
-      lastStreakIncrement,
-    );
-
     // If there's a session today or yesterday, start streak at 1
     const latestSessionDate = formatDateToString(
       new Date(sessions[0].completed_at),
@@ -121,44 +113,31 @@ export function calculateNewStreak(
   }
 
   if (lastStreakIncrement === today) {
-    console.log(
-      "Streak was already incremented today, returning current streak",
-    );
     return currentStreak;
   }
 
   // More than 1 sessions exist
-  console.log("There are multiple sessions");
-
   const sessionDates = sessions.map((s) =>
     formatDateToString(new Date(s.completed_at)),
   );
 
+  // This shouldn't ever happen because of last_streak_increment
   // if (sessionDates[0] === today && sessionDates[1] === today) {
-  //   console.log("Last 2 sessions are both from today, maintaining streak");
   //   return currentStreak; // maintain current streak
   // }
 
   if (sessionDates[0] === today && sessionDates[1] === yesterday) {
-    console.log(
-      "Last 2 sessions are from 0 = today and 1 = yesterday, incrementing streak by 1",
-    );
     return currentStreak + 1; // increment streak
   }
 
   if (sessionDates[0] === today) {
-    console.log(
-      "0 = today, but 1 is older than yesterday. That means the streak is broken. Resetting to 1.",
-    );
     return 1; // reset to 1
   }
 
   if (sessionDates[0] === yesterday) {
-    console.log("Session[0] = yesterday, so we're maintaining the streak.");
     return currentStreak; // maintain streak
   }
 
-  console.log("No session today or yesterday, returning 0");
   return 0; // reset to 0
 }
 
@@ -183,11 +162,7 @@ export async function updateUserStreak(
     .order("completed_at", { ascending: false })
     .limit(2);
 
-  console.log("sessions: ", sessions);
-
   if (error) throw new Error(`Failed to fetch sessions: ${error.message}`);
-
-  console.log("last_streak_increment", last_streak_increment);
 
   const newStreak = calculateNewStreak(
     sessions,
@@ -198,7 +173,6 @@ export async function updateUserStreak(
   let newStreakIncrement = last_streak_increment;
 
   if (newStreak > examen_streak) {
-    console.log("lastStreakIncrement updated!");
     newStreakIncrement = getTodayString();
   }
 
