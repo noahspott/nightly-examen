@@ -3,8 +3,6 @@
  *
  * After the user completes an examen, this will log the session in the database.
  */
-
-import { updateLastStreakUpdate } from "@/app/dashboard/lib/userStreakUtils";
 import { createClient } from "../server";
 import { getUser } from "@/lib/auth/server";
 
