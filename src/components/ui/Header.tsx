@@ -19,13 +19,13 @@ export default function Header() {
       </Link>
 
       {pathname === "/settings" ? (
-        <TransitionLink href="/dashboard">
+        <Link href="/dashboard">
           <X />
-        </TransitionLink>
+        </Link>
       ) : (
-        <TransitionLink href={"/settings"}>
+        <Link href={"/settings"}>
           <Settings />
-        </TransitionLink>
+        </Link>
       )}
     </div>
   );

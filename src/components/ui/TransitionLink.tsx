@@ -9,6 +9,10 @@ interface TransitionLinkProps extends LinkProps {
   href: string;
 }
 
+async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default function TransitionLink({
   children,
   href,
@@ -22,7 +26,15 @@ export default function TransitionLink({
     e.preventDefault();
     console.log("handleTransition!");
 
+    const body = document.querySelector("body");
+
+    body?.classList.add("page-transition");
+
+    await sleep(500);
     router.push(href);
+    await sleep(500);
+
+    body?.classList.remove("page-transition");
   }
   return (
     <Link href={href} onClick={(e) => handleTransition(e)}>
