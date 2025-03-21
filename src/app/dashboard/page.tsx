@@ -8,8 +8,7 @@ import type { BibleVerse } from "@/types/types";
 
 // Components
 import UserStats from "@/app/dashboard/components/UserStats";
-import LinkButton from "@/components/ui/LinkButton";
-import Header from "@/components/ui/Header";
+import { Main, Header, LinkButton } from "@/components/ui";
 import { Quote } from "@/components/examen";
 
 /**
@@ -25,7 +24,7 @@ export default function Dashboard() {
   const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
 
   return (
-    <div className="max-w-screen-md mx-auto">
+    <Main>
       <Header />
       <div className="px-4 flex flex-col gap-8">
         <h1 className="text-3xl text-white font-bold mt-4">Dashboard</h1>
@@ -60,6 +59,6 @@ export default function Dashboard() {
           Start Examen
         </LinkButton>
       </div>
-    </div>
+    </Main>
   );
 }
