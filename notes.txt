@@ -1,7 +1,7 @@
-// New Streak Idea
-1. Calculate and cache from 1st dashboard view 
-2. Invalidate cache after examen
-3. Calculate and cache 
+// Dashboard Menu
+- Allows user to log out
+- Plays nice animation
+
 
 
 

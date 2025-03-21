@@ -7,6 +7,17 @@ body {
   min-width: 320px;
   margin: 0 auto;
   /* box-sizing: border-box; */
+
+  transition: opacity, background, transform, filter;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition {
+  opacity: 0;
+  background: black;
+  transform: translateX(40px);
+  filter: blur(12px);
 }
 
 * {

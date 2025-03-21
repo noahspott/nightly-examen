@@ -1,22 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LogOut, Settings, X } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signOut } from "@/lib/auth/client";
-import { Settings } from "lucide-react";
-import ConfirmationModal from "../modals/ConfirmationModel";
+import { useRouter, usePathname } from "next/navigation";
+
+import TransitionLink from "./TransitionLink";
 
 export default function Header() {
-  const router = useRouter();
-
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-
-  function handleLogout() {
-    signOut();
-    router.push("/");
-  }
+  const pathname = usePathname();
 
   function handleSettingsClick() {}
 
@@ -26,22 +18,15 @@ export default function Header() {
         <p className="text-2xl font-bold">NightlyExamen</p>
       </Link>
 
-      {/* <button onClick={handleSettingsClick}>
-        <Settings />
-      </button> */}
-
-      <button className="ml-auto" onClick={() => setIsExitModalOpen(true)}>
-        <LogOut />
-      </button>
-
-      <ConfirmationModal
-        isOpen={isExitModalOpen}
-        onClose={() => setIsExitModalOpen(false)}
-        onConfirm={() => handleLogout()}
-        title="Logout"
-        message="Are you sure you want to logout?"
-        confirmationButtonText="Logout"
-      />
+      {pathname === "/settings" ? (
+        <Link href="/dashboard">
+          <X />
+        </Link>
+      ) : (
+        <Link href={"/settings"}>
+          <Settings />
+        </Link>
+      )}
     </div>
   );
 }

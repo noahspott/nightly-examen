@@ -36,9 +36,9 @@ export default function ExamenLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { state, dispatch } = useExamen();
-  const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
@@ -92,20 +92,6 @@ export default function ExamenLayout({
       console.error("Failed to log session:", error);
     }
   }
-
-  // async function handleUpdateUserData(id: string) {
-  //   try {
-  //     console.log("Attempting to update user data...");
-  //     const response = await fetch(`/api/users/${id}`, { method: "PATCH" });
-
-  //     if (!response.ok) throw new Error("Failed to update user data");
-
-  //     const data = await response.json();
-  //     console.log("User data updated successfully:", data);
-  //   } catch (error) {
-  //     console.error("Failed to update user data:", error);
-  //   }
-  // }
 
   return (
     <>
