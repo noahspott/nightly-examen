@@ -10,6 +10,7 @@ import type { BibleVerse } from "@/types/types";
 import UserStats from "@/app/dashboard/components/UserStats";
 import { Main, Header, LinkButton } from "@/components/ui";
 import { Quote } from "@/components/examen";
+import ConfessionTracker from "./components/ConfessionTracker";
 
 /**
  * Dashboard Page
@@ -33,6 +34,11 @@ export default function Dashboard() {
         <div>
           <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
           <UserStats />
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Last Confession</h2>
+          <ConfessionTracker />
         </div>
 
         <div>

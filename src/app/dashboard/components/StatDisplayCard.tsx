@@ -11,7 +11,7 @@ export default function StatDisplayCard({
 }: StatDisplayCardProps) {
   return (
     <div
-      className={`flex sm:justify-center text-left justify-start sm:text-center gap-4 dashboard--card ${isFetching && "animate-pulse"}`}
+      className={`flex font-semibold sm:justify-center text-left justify-start sm:text-center gap-4 dashboard--card ${isFetching && "animate-pulse"}`}
     >
       <div
         className={`flex flex-col transition-opacity duration-500 ${isFetching ? "opacity-0" : "opacity-100"}`}

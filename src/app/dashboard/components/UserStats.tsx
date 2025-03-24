@@ -31,7 +31,6 @@
 
 // Lib
 import { useQuery } from "@tanstack/react-query";
-import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { createClient } from "@/lib/supabase/client";
 import { fetchStats } from "../lib/api";
 import { updateUserStreak } from "../lib/userStreakUtils";
@@ -39,7 +38,6 @@ import { updateUserStreak } from "../lib/userStreakUtils";
 // Components
 import StatDisplayCard from "./StatDisplayCard";
 import WeekStats from "./WeekStats";
-import { CheckCircle, Circle } from "lucide-react";
 
 const supabase = createClient();
 
@@ -70,7 +68,7 @@ export default function UserStats() {
   if (error) return "An error has occurred. Please try refreshing the browser.";
 
   return (
-    <div className="flex flex-col gap-2 font-semibold">
+    <div className="flex flex-col gap-2">
       {/* Row 1 -- Week Stats */}
       <WeekStats stats={stats} isFetching={isFetching} />
 
