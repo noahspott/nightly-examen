@@ -4,13 +4,25 @@
 import { useMemo } from "react";
 import { getGreeting } from "@/utils/greeting";
 import { getRandomBibleVerse } from "@/utils";
-import type { BibleVerse } from "@/types/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createClient } from "@/lib/supabase/client";
+import { fetchStats } from "./lib/api";
+import { updateUserStreak } from "./lib/userStreakUtils";
+import { updateUserStats } from "./lib/dashboardUtils";
+import { useEffect } from "react";
+import { fetchDashboardDataFrom } from "./lib/dashboardUtils";
 
 // Components
 import UserStats from "@/app/dashboard/components/UserStats";
 import { Main, Header, LinkButton } from "@/components/ui";
 import { Quote } from "@/components/examen";
 import ConfessionTracker from "./components/ConfessionTracker";
+import getDaysSinceLastConfession from "./lib/confessionTrackerUtils";
+
+// Types
+import type { StatsResponse } from "./types/types";
+
+const supabase = createClient();
 
 /**
  * Dashboard Page
@@ -21,6 +33,35 @@ import ConfessionTracker from "./components/ConfessionTracker";
  * - allows Examen start
  */
 export default function Dashboard() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    mutation.mutate();
+  }, []);
+  const mutation = useMutation({
+    mutationFn: updateUserStats,
+    onSettled: () => {
+      console.log("[onSettled]");
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+    },
+  });
+
+  const {
+    isFetching,
+    data: stats = {
+      streak: 0,
+      totalSessions: 0,
+      daysSinceLastConfession: 0,
+      weekCompletionStatus: Array(7).fill(false),
+    },
+    error,
+  } = useQuery({
+    queryKey: ["stats"],
+    queryFn: async () => fetchDashboardDataFrom(supabase),
+  });
+
+  if (error) return "An error has occurred. Please try refreshing the page.";
+
   const greeting = getGreeting();
   const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
 
@@ -33,12 +74,15 @@ export default function Dashboard() {
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
-          <UserStats />
+          <UserStats isFetching={isFetching} stats={stats} />
         </div>
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Last Confession</h2>
-          <ConfessionTracker />
+          <ConfessionTracker
+            isFetching={isFetching}
+            daysSinceLastConfession={stats.daysSinceLastConfession}
+          />
         </div>
 
         <div>

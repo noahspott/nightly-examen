@@ -71,16 +71,16 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("👤 Middleware - Auth status:", {
-    hasUser: !!user,
-    path: request.nextUrl.pathname,
-    isProtectedRoute: !(
-      request.nextUrl.pathname === "/" ||
-      request.nextUrl.pathname === "/examen/classic" ||
-      request.nextUrl.pathname.startsWith("/login") ||
-      request.nextUrl.pathname.startsWith("/auth")
-    ),
-  });
+  // console.log("👤 Middleware - Auth status:", {
+  //   hasUser: !!user,
+  //   path: request.nextUrl.pathname,
+  //   isProtectedRoute: !(
+  //     request.nextUrl.pathname === "/" ||
+  //     request.nextUrl.pathname === "/examen/classic" ||
+  //     request.nextUrl.pathname.startsWith("/login") ||
+  //     request.nextUrl.pathname.startsWith("/auth")
+  //   ),
+  // });
 
   if (
     !user &&

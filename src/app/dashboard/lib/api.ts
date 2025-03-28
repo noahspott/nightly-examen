@@ -1,12 +1,7 @@
+import { StatsResponse } from "../types/types";
 import { fetchUserStreak, updateUserStreak } from "./userStreakUtils";
 import { getWeekSessions } from "./weekStatsUtils";
 import { SupabaseClient } from "@supabase/supabase-js";
-
-type StatsResponse = {
-  totalSessions: number;
-  weekCompletionStatus: boolean[];
-  streak: number;
-};
 
 /**
  * Fetches and aggregates user statistics including total sessions, weekly completion status, and current streak.
@@ -47,6 +42,7 @@ export async function fetchStats(
   if (sessionsError) throw sessionsError;
 
   return {
+    daysSinceLastConfession: 5,
     totalSessions: sessions.length,
     weekCompletionStatus: getWeekSessions(sessions),
     streak: userStreakData.examen_streak,

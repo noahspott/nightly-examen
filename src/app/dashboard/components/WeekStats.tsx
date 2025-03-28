@@ -7,14 +7,11 @@ import { CheckCircle, Circle } from "lucide-react";
 
 // Lib
 import { getDayOfWeek } from "@/utils/dayOfTheWeek";
+import { StatsResponse } from "../types/types";
 
 type WeekStatsProps = {
   isFetching: boolean;
-  stats: {
-    totalSessions: number;
-    weekCompletionStatus: any[];
-    streak: number;
-  };
+  stats: StatsResponse;
 };
 
 export default function WeekStats({ isFetching, stats }: WeekStatsProps) {
