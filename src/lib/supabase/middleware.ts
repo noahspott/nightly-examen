@@ -37,7 +37,13 @@ export async function updateSession(request: NextRequest) {
           // );
           return cookies;
         },
-        setAll(cookiesToSet) {
+        setAll(
+          cookiesToSet: {
+            name: string;
+            value: string;
+            options: Record<string, unknown>;
+          }[],
+        ) {
           // console.log(
           //   "🍪 Middleware - Setting cookies:",
           //   cookiesToSet.map((c) => c.name),
