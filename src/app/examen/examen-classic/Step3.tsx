@@ -1,5 +1,6 @@
 import StepHeader from "@/components/examen/StepHeader";
 import Quote from "@/components/examen/Quote";
+import type { ExamenStepProps } from "../types";
 
 const heading = "Prayer of Gratitude";
 const description =
@@ -8,7 +9,7 @@ const description =
 const prayer =
   "Heavenly Father, I thank You for the countless gifts You have bestowed upon me today. Your grace is evident in every kind word, every moment of peace, and every act of love. May I never take these gifts for granted, but always remember Your loving presence in my life. Amen.";
 
-export default function Step3() {
+export default function Step3(_: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />

@@ -43,6 +43,7 @@ export default function ExamenLayout({
   const [user, setUser] = useState<User | null>(null);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
+  const [isCompleting, setIsCompleting] = useState(false);
 
   useEffect(() => {
     async function getUser() {
@@ -65,15 +66,19 @@ export default function ExamenLayout({
     }
   }, [showCompletion]);
 
-  async function handleCompleteExamen() {
-    dispatch({ type: "INCREMENT_STEP" });
+  function handleCompleteExamen() {
+    if (isCompleting) return;
+
+    setIsCompleting(true);
 
     if (user) {
-      await handleLogSession();
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      handleLogSession().finally(() => {
+        queryClient.invalidateQueries({ queryKey: ["stats"] });
+      });
     }
 
-    // Wait for progress bar animation to complete
+    // Wait briefly so the progress bar can finish animating,
+    // but give immediate visual feedback via the loading state.
     setTimeout(() => {
       setShowCompletion(true);
     }, 600);
@@ -124,9 +129,10 @@ export default function ExamenLayout({
             >
               <Button
                 onClick={handleCompleteExamen}
-                className="button--primary--lg w-full"
+                disabled={isCompleting}
+                className="button--primary--lg w-full disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Complete Examen
+                {isCompleting ? "Completing…" : "Complete Examen"}
               </Button>
             </motion.div>
           )}

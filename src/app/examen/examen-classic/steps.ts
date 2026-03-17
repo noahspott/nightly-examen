@@ -1,6 +1,8 @@
-import * as Steps from './index';
+import React from "react";
+import * as Steps from "./index";
+import type { ExamenStepProps } from "../types";
 
-export const examenSteps = [
+export const examenSteps: React.ComponentType<ExamenStepProps>[] = [
   Steps.Step1,
   Steps.Step2,
   Steps.Step3,

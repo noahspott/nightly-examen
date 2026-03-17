@@ -1,10 +1,12 @@
 import StepHeader from "@/components/examen/StepHeader";
 import Timer from "@/components/examen/Timer";
+import type { ExamenStepProps } from "../types";
 
 const heading = "Rest in God's Peace";
-const description = "Rest in the assurance of God's love. Reflect on the promise of renewal and the blessings that await you tomorrow. Let His grace fill you with hope and joy as you prepare for a new day.";
+const description =
+  "Rest in the assurance of God's love. Reflect on the promise of renewal and the blessings that await you tomorrow. Let His grace fill you with hope and joy as you prepare for a new day.";
 
-export default function Step7() {
+export default function Step7(_: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />

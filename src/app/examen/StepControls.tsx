@@ -11,7 +11,7 @@ import { useExamen } from "@/context/ExamenContext";
 
 export default function StepControls() {
   const { state, dispatch } = useExamen();
-  const { step, numSteps, isTyping } = state;
+  const { step, numSteps } = state;
 
   function handleStepChange(direction: "next" | "prev") {
     if (direction === "next") {
@@ -28,18 +28,14 @@ export default function StepControls() {
         className="user-select-none order-first transition-all disabled:opacity-0 disabled:cursor-not-allowed  p-2 rounded-full "
         onClick={() => handleStepChange("prev")}
       >
-        <ChevronLeft
-          className={`${isTyping ? "size-12 text-white/90" : "size-16 text-white"}`}
-        />
+        <ChevronLeft className="size-16 text-white" />
       </motion.button>
       <motion.button
         disabled={step >= numSteps - 1}
         className="user-select-none place-self-end transition-all disabled:opacity-0 disabled:cursor-not-allowed  p-2 rounded-full "
         onClick={() => handleStepChange("next")}
       >
-        <ChevronRight
-          className={`${isTyping ? "size-12 text-white/90" : "size-16 text-white"}`}
-        />
+        <ChevronRight className="size-16 text-white" />
       </motion.button>
     </div>
   );

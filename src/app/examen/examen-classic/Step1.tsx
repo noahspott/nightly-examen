@@ -1,6 +1,7 @@
 import StepHeader from "@/components/examen/StepHeader";
 import Quote from "@/components/examen/Quote";
 import Timer from "@/components/examen/Timer";
+import type { ExamenStepProps } from "../types";
 
 const heading = "Meditate on the Presence of God";
 const description =
@@ -9,7 +10,7 @@ const description =
 const quote = "And surely I am with you always, to the very end of the age.";
 const quoteAuthor = "Matthew 28:20";
 
-export default function Step1() {
+export default function Step1(_: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />

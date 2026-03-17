@@ -1,5 +1,6 @@
 import StepHeader from "@/components/examen/StepHeader";
 import Quote from "@/components/examen/Quote";
+import type { ExamenStepProps } from "../types";
 
 const heading = "Prayer for Forgiveness";
 const description =
@@ -8,7 +9,7 @@ const description =
 const prayer =
   "Merciful Lord, I come before You with a humble heart, acknowledging the times I have fallen short and failed to embrace Your grace. Please forgive my shortcomings and help me to learn from my mistakes. Cleanse my heart and renew my spirit, so that I may walk in Your light with greater faith and love tomorrow. Amen.";
 
-export default function Step5() {
+export default function Step5(_: ExamenStepProps) {
   return (
     <div>
       <StepHeader heading={heading} description={description} />
