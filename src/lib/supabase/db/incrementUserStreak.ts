@@ -1,59 +1,77 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  calculateNewStreak,
+  getTodayString,
+} from "@/app/dashboard/lib/userStreakUtils";
+
+type StreakResponse =
+  | {
+      message: string;
+      newStreak: number;
+    }
+  | {
+      error: Error;
+    };
+
 /**
- * Increments or resets a user's daily examen streak based on their last active date
+ * Recalculates and persists a user's examen streak based on their recent sessions.
  *
- * The streak logic works as follows:
- * - If the user was last active yesterday: increment their streak
- * - If the user was already active today: maintain current streak
- * - If the user missed a day: reset streak to 1
- *
- * @param supabase - Supabase client instance for database operations
- * @param userId - The unique identifier of the user
- *
- * @returns {Promise<Object>} Object containing either:
- *   - {message: string, newStreak: number} on success
- *   - {error: Error} on failure
- *
- * @throws {Error} If there's an error fetching the user data
+ * This uses the shared, date-based streak logic and is idempotent per day:
+ * calling it multiple times in the same day will not inflate the streak.
  */
-
-type StreakResponse = {
-  message?: string;
-  newStreak?: number;
-  error?: Error;
-};
-
 export default async function incrementUserStreak(
-  supabase: any,
+  supabase: SupabaseClient,
   userId: string,
 ): Promise<StreakResponse> {
-  const { data: user, error } = await supabase
+  const { data: user, error: userError } = await supabase
     .from("users")
-    .select("last_active_date, examen_streak")
+    .select("examen_streak, last_streak_increment")
     .eq("id", userId)
     .single();
 
-  if (error) {
-    throw new Error(error.message);
+  if (userError) {
+    return { error: new Error(userError.message) };
   }
 
-  const { last_active_date, examen_streak } = user;
+  const currentStreak = user?.examen_streak ?? 0;
+  const lastStreakIncrement: string | null = user?.last_streak_increment ?? null;
 
-  const today = new Date();
+  const { data: sessions, error: sessionsError } = await supabase
+    .from("sessions")
+    .select("completed_at")
+    .eq("user_id", userId)
+    .order("completed_at", { ascending: false })
+    .limit(2);
 
-  // Update record
+  if (sessionsError) {
+    return { error: new Error(sessionsError.message) };
+  }
+
+  const newStreak = calculateNewStreak(
+    sessions ?? [],
+    currentStreak,
+    lastStreakIncrement,
+  );
+
+  let newStreakIncrement = lastStreakIncrement;
+  if (newStreak > currentStreak) {
+    newStreakIncrement = getTodayString();
+  }
+
   const { error: updateError } = await supabase
     .from("users")
     .update({
-      last_active_date: today,
-      examen_streak: examen_streak + 1,
+      examen_streak: newStreak,
+      last_streak_increment: newStreakIncrement,
     })
     .eq("id", userId);
 
   if (updateError) {
-    console.error("Error updating user streak:", updateError);
-    return { error: updateError };
+    return { error: new Error(updateError.message) };
   }
 
-  console.log("updateUserStreak()");
-  return { message: "User streak updated successfully" };
+  return {
+    message: "User streak updated successfully",
+    newStreak,
+  };
 }

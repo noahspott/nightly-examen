@@ -34,7 +34,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getDayOfWeek } from "@/utils/dayOfTheWeek";
 import { createClient } from "@/lib/supabase/client";
 import { fetchStats } from "../lib/api";
-import { updateUserStreak } from "../lib/userStreakUtils";
 
 // Components
 import StatDisplayCard from "./StatDisplayCard";
@@ -53,6 +52,10 @@ export default function UserStats() {
     error,
   } = useQuery({
     queryKey: ["stats"],
+    // Cache for a bit and avoid refetching on every window focus/reconnect
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     queryFn: async () => {
       const {
         data: { user },
@@ -61,8 +64,7 @@ export default function UserStats() {
       if (userError) throw userError;
       if (!user) throw new Error("No user found");
 
-      await updateUserStreak(supabase, user.id);
-      return await fetchStats(supabase);
+      return await fetchStats(supabase, user.id);
     },
   });
 
