@@ -14,7 +14,7 @@ export default function StatDisplayCard({
       className={`flex sm:justify-center text-left justify-start sm:text-center gap-4 dashboard--card ${isFetching && "animate-pulse"}`}
     >
       <div
-        className={`flex flex-col transition-opacity duration-500 ${isFetching ? "opacity-0" : "opacity-100"}`}
+        className={`flex flex-col transition-opacity duration-150 ${isFetching ? "opacity-0" : "opacity-100"}`}
       >
         <p className="text-2xl">{statNum}</p>
         <h4 className="text-base text-white/70">{statName}</h4>

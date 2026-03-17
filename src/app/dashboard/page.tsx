@@ -1,10 +1,7 @@
-"use client";
-
 // Lib
-import { useMemo } from "react";
-import { getGreeting } from "@/utils/greeting";
 import { getRandomBibleVerse } from "@/utils";
-import type { BibleVerse } from "@/types/types";
+import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth/server";
 
 // Components
 import UserStats from "@/app/dashboard/components/UserStats";
@@ -19,20 +16,26 @@ import { Quote } from "@/components/examen";
  * - allows logout
  * - allows Examen start
  */
-export default function Dashboard() {
-  const greeting = getGreeting();
-  const bibleVerse = useMemo(() => getRandomBibleVerse(), []);
+export default async function Dashboard() {
+  const supabase = await createClient();
+  const user = await getUser(supabase);
+
+  // If no user, let middleware or upstream routing handle redirect logic.
+  if (!user) {
+    return null;
+  }
+
+  const bibleVerse = getRandomBibleVerse();
 
   return (
     <Main>
       <Header />
       <div className="px-4 flex flex-col gap-8">
         <h1 className="text-3xl text-white font-bold mt-4">Dashboard</h1>
-        {/* <p className="text-xl font-bold my-4">{greeting}</p> */}
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Your Stats</h2>
-          <UserStats />
+          <UserStats userId={user.id} />
         </div>
 
         <div>

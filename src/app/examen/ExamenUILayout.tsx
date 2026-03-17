@@ -29,7 +29,7 @@ import ConfirmationModal from "@/components/modals/ConfirmationModel";
 import { User } from "@supabase/auth-js";
 
 // Constants
-const animationDuration = 3000;
+const animationDuration = 1800;
 
 export default function ExamenLayout({
   children,

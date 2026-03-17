@@ -1,8 +1,7 @@
-import { fetchUserStreak } from "./userStreakUtils";
 import { getWeekSessions } from "./weekStatsUtils";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-type StatsResponse = {
+export type StatsResponse = {
   totalSessions: number;
   weekCompletionStatus: boolean[];
   streak: number;
@@ -27,22 +26,30 @@ export async function fetchStats(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<StatsResponse> {
-  const [sessionsResponse, userStreakData] = await Promise.all([
+  const [sessionsResponse, userResponse] = await Promise.all([
     supabase
       .from("sessions")
-      .select("completed_at")
+      // Limit to a reasonable number of recent sessions to keep payloads small.
+      .select("completed_at", { count: "exact" })
       .order("completed_at", { ascending: false })
-      .eq("user_id", userId),
-
-    fetchUserStreak(userId),
+      .eq("user_id", userId)
+      .limit(50),
+    supabase
+      .from("users")
+      .select("examen_streak")
+      .eq("id", userId)
+      .single(),
   ]);
 
-  const { data: sessions, error: sessionsError } = sessionsResponse;
+  const { data: sessions, error: sessionsError, count } = sessionsResponse;
+  const { data: user, error: userError } = userResponse;
+
   if (sessionsError) throw sessionsError;
+  if (userError) throw userError;
 
   return {
-    totalSessions: sessions.length,
-    weekCompletionStatus: getWeekSessions(sessions),
-    streak: userStreakData.examen_streak,
+    totalSessions: count ?? (sessions?.length ?? 0),
+    weekCompletionStatus: getWeekSessions(sessions ?? []),
+    streak: user?.examen_streak ?? 0,
   };
 }
