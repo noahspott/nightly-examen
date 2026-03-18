@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 /**
  * Handles authentication callback verification for various authentication flows.
  *
- * @route GET /auth/confirm
+ * @route GET /api/auth/confirm
  * @param request - Next.js request object containing token_hash and type parameters
  * @returns Redirects to:
  *  - /dashboard on successful verification
@@ -61,3 +61,4 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+

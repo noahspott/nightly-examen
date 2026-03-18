@@ -7,12 +7,10 @@ export default function Login() {
 
   useEffect(() => {
     const checkCookieSupport = () => {
-      try {
-        // Try to set a test cookie
+      try {        
         document.cookie = "cookieTest=1";
         const cookieEnabled = document.cookie.indexOf("cookieTest") !== -1;
 
-        // Clean up the test cookie
         document.cookie = "cookieTest=1; expires=Thu, 01 Jan 1970 00:00:01 GMT";
 
         setCookiesEnabled(cookieEnabled);
@@ -24,7 +22,6 @@ export default function Login() {
     checkCookieSupport();
   }, []);
 
-  // Check for error parameters in URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const error = params.get("error");
@@ -32,7 +29,6 @@ export default function Login() {
 
     if (error) {
       console.error("Authentication error:", errorDescription);
-      // You could set an error state here to show to the user
     }
   }, []);
 

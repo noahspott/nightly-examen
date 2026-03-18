@@ -70,7 +70,7 @@
         1. Copy this link:<br>
     </p>
     <div class="code-block">
-        <code>{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email</code>
+        <code>{{ .SiteURL }}/api/auth/confirm?token_hash={{ .TokenHash }}&type=email</code>
     </div>
 
     <p>2. Open your preferred browser (Safari/Chrome)<br>
