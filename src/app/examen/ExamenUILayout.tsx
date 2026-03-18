@@ -72,7 +72,7 @@ export default function ExamenLayout({
     setIsCompleting(true);
 
     if (user) {
-      handleLogSession().finally(() => {
+      handleLogSession(user.id).finally(() => {
         queryClient.invalidateQueries({ queryKey: ["stats"] });
       });
     }
@@ -84,10 +84,12 @@ export default function ExamenLayout({
     }, 600);
   }
 
-  async function handleLogSession() {
+  async function handleLogSession(userId: string) {
     try {
       console.log("Attempting to log session...");
-      const response = await fetch("/api/sessions", { method: "POST" });
+      const response = await fetch(`/api/users/${userId}/sessions`, {
+        method: "POST",
+      });
 
       if (!response.ok) throw new Error("Failed to log session");
 

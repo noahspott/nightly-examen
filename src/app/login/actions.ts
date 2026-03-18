@@ -22,13 +22,26 @@ export async function signInWithEmail(email: string) {
 export async function signInWithOtp(email: string) {
   const supabase = await createClient();
 
-  return await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/confirm`,
-      shouldCreateUser: true,
-    },
-  });
+  try {
+    const result = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/confirm`,
+        shouldCreateUser: true,
+      },
+    });
+
+    if (result.error) {
+      return { error: result.error.message };
+    }
+
+    return result;
+  } catch (error) {
+    // Supabase may throw an AuthApiError (e.g. rate limit exceeded) instead of
+    // returning `{ error }`. Normalize to a consistent return shape for the UI.
+    const message = error instanceof Error ? error.message : "Failed to send OTP.";
+    return { error: message };
+  }
 }
 
 export async function verifyOtp(email: string, token: string) {

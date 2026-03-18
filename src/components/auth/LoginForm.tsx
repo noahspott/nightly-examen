@@ -23,23 +23,44 @@ export default function LoginForm() {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await signInWithOtp(email);
+    try {
+      const { error } = await signInWithOtp(email);
 
-    if (error) {
-      console.error("Failed to send OTP:", error);
-      setMessage({
-        type: "error",
-        text: "Failed to send OTP. Please try again.",
-      });
-    } else {
+      if (error) {
+        const errorMessage = String(error);
+        const isEmailRateLimit =
+          errorMessage.toLowerCase().includes("email rate limit exceeded");
+
+        console.error("Failed to send OTP:", errorMessage);
+        setMessage({
+          type: "error",
+          text: isEmailRateLimit
+            ? "Too many sign-in requests for this email. Please wait a few minutes and try again."
+            : "Failed to send OTP. Please try again.",
+        });
+        return;
+      }
+
       setShowOtpInput(true);
       setMessage({
         type: "success",
         text: "Check your email for the verification code!",
       });
-    }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to send OTP.";
+      const isEmailRateLimit =
+        errorMessage.toLowerCase().includes("email rate limit exceeded");
 
-    setLoading(false);
+      console.error("Failed to send OTP (unexpected):", errorMessage);
+      setMessage({
+        type: "error",
+        text: isEmailRateLimit
+          ? "Too many sign-in requests for this email. Please wait a few minutes and try again."
+          : "Failed to send OTP. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {

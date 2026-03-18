@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { logSession } from "@/lib/supabase/db";
+import { getUser } from "@/lib/auth/server";
+import { createClient as createServerClient } from "@/lib/supabase/server";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -50,4 +53,33 @@ export async function GET(
   }
 
   return NextResponse.json(sessions ?? []);
+}
+
+export async function POST(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+
+  // Enforce that the URL `id` matches the currently authenticated Supabase user.
+  const serverSupabase = await createServerClient();
+  const user = await getUser(serverSupabase);
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (user.id !== id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  try {
+    await logSession();
+    return NextResponse.json({ message: "Session logged!" }, { status: 200 });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("[log-session] Error logging session:", error);
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
 }

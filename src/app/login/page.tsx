@@ -4,6 +4,7 @@ import LoginForm from "@/components/auth/LoginForm";
 
 export default function Login() {
   const [cookiesEnabled, setCookiesEnabled] = useState<boolean>(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const checkCookieSupport = () => {
@@ -28,7 +29,15 @@ export default function Login() {
     const errorDescription = params.get("error_description");
 
     if (error) {
-      console.error("Authentication error:", errorDescription);
+      const combined = errorDescription ?? error;
+      const isEmailRateLimit =
+        combined.toLowerCase().includes("email rate limit exceeded");
+
+      setAuthError(
+        isEmailRateLimit
+          ? "Too many sign-in requests for this email. Please wait a few minutes and try again."
+          : errorDescription ?? "Authentication error. Please try again."
+      );
     }
   }, []);
 
@@ -46,6 +55,14 @@ export default function Login() {
 
       {cookiesEnabled ? (
         <>
+          {authError && (
+            <div
+              className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-md text-sm mb-4 w-full"
+              role="alert"
+            >
+              {authError}
+            </div>
+          )}
           <LoginForm />
           <p className="text-center text-sm text-white/50 mt-4">
             Enter your email to receive a verification code
