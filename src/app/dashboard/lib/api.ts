@@ -7,6 +7,58 @@ export type StatsResponse = {
   streak: number;
 };
 
+type SessionRow = {
+  completed_at: string;
+};
+
+function formatLocalDay(d: Date): string {
+  // Use the local timezone day boundaries (not ISO/UTC).
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function startOfLocalDay(d: Date): Date {
+  const copy = new Date(d);
+  copy.setHours(0, 0, 0, 0);
+  return copy;
+}
+
+function calculateStreakFromSessions(sessions: SessionRow[]): number {
+  if (!sessions || sessions.length === 0) return 0;
+
+  const dayKeys = new Set<string>();
+  for (const s of sessions) {
+    const date = new Date(s.completed_at);
+    if (Number.isNaN(date.getTime())) continue;
+    dayKeys.add(formatLocalDay(date));
+  }
+
+  const now = new Date();
+  const todayKey = formatLocalDay(now);
+
+  const yesterdayDate = new Date(now);
+  yesterdayDate.setDate(now.getDate() - 1);
+  const yesterdayKey = formatLocalDay(yesterdayDate);
+
+  // Streak always "ends" at today if there is any completion today,
+  // otherwise at yesterday if there is any completion yesterday.
+  let cursor: Date | null = null;
+  if (dayKeys.has(todayKey)) cursor = startOfLocalDay(now);
+  else if (dayKeys.has(yesterdayKey))
+    cursor = startOfLocalDay(yesterdayDate);
+  else return 0;
+
+  let streak = 0;
+  while (dayKeys.has(formatLocalDay(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  return streak;
+}
+
 /**
  * Fetches and aggregates user statistics including total sessions, weekly completion status, and current streak.
  *
@@ -26,30 +78,21 @@ export async function fetchStats(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<StatsResponse> {
-  const [sessionsResponse, userResponse] = await Promise.all([
+  const sessionsResponse = await Promise.all([
     supabase
       .from("sessions")
-      // Limit to a reasonable number of recent sessions to keep payloads small.
       .select("completed_at", { count: "exact" })
       .order("completed_at", { ascending: false })
-      .eq("user_id", userId)
-      .limit(50),
-    supabase
-      .from("users")
-      .select("examen_streak")
-      .eq("id", userId)
-      .single(),
+      .eq("user_id", userId),
   ]);
 
-  const { data: sessions, error: sessionsError, count } = sessionsResponse;
-  const { data: user, error: userError } = userResponse;
+  const { data: sessions, error: sessionsError, count } = sessionsResponse[0];
 
   if (sessionsError) throw sessionsError;
-  if (userError) throw userError;
 
   return {
     totalSessions: count ?? (sessions?.length ?? 0),
     weekCompletionStatus: getWeekSessions(sessions ?? []),
-    streak: user?.examen_streak ?? 0,
+    streak: calculateStreakFromSessions((sessions ?? []) as SessionRow[]),
   };
 }

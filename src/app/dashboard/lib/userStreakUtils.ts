@@ -2,7 +2,11 @@ import { DatabaseSession } from "../types/types";
 
 // Date utility functions
 export const formatDateToString = (date: Date): string => {
-  return date.toISOString().split("T")[0];
+  // Use local timezone day boundaries (not UTC).
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
 
 export function getTodayString() {
@@ -42,6 +46,14 @@ export function calculateNewStreak(
   currentStreak: number,
   lastStreakIncrement: string | null | undefined,
 ): number {
+  const completedAtToDayKey = (completedAt: string): string => {
+    // Tests (and possibly other callers) may pass `YYYY-MM-DD` directly.
+    // Treat it as already a day key to avoid `new Date("YYYY-MM-DD")`
+    // being parsed as UTC.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(completedAt)) return completedAt;
+    return formatDateToString(new Date(completedAt));
+  };
+
   // No sessions exist
   if (!sessions || sessions.length === 0) {
     return 0;
@@ -52,7 +64,7 @@ export function calculateNewStreak(
 
   // Only one session exists
   if (sessions.length === 1) {
-    const sessionDate = formatDateToString(new Date(sessions[0].completed_at));
+    const sessionDate = completedAtToDayKey(sessions[0].completed_at);
     if (sessionDate === today || sessionDate === yesterday) {
       return 1;
     }
@@ -62,9 +74,7 @@ export function calculateNewStreak(
   // Handle undefined or null lastStreakIncrement
   if (!lastStreakIncrement) {
     // If there's a session today or yesterday, start streak at 1
-    const latestSessionDate = formatDateToString(
-      new Date(sessions[0].completed_at),
-    );
+    const latestSessionDate = completedAtToDayKey(sessions[0].completed_at);
     return latestSessionDate === today || latestSessionDate === yesterday
       ? 1
       : 0;
@@ -76,7 +86,7 @@ export function calculateNewStreak(
 
   // More than 1 sessions exist
   const sessionDates = sessions.map((s) =>
-    formatDateToString(new Date(s.completed_at)),
+    completedAtToDayKey(s.completed_at),
   );
 
   // This shouldn't ever happen because of last_streak_increment
