@@ -26,9 +26,11 @@ export default function UserStats({ userId }: UserStatsProps) {
     queryKey: ["stats", userId],
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnReconnect: true,
     queryFn: async () => {
-      const response = await fetch(`/api/stats?userId=${encodeURIComponent(userId)}`);
+      const response = await fetch(
+        `/api/users/${encodeURIComponent(userId)}/dashboard`,
+      );
 
       if (!response.ok) {
         throw new Error("Failed to load stats");

@@ -20,11 +20,6 @@ export default async function Dashboard() {
   const supabase = await createClient();
   const user = await getUser(supabase);
 
-  // If no user, let middleware or upstream routing handle redirect logic.
-  if (!user) {
-    return null;
-  }
-
   const bibleVerse = getRandomBibleVerse();
 
   return (
